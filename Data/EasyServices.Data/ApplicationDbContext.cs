@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Reflection;
+    using System.Security.Cryptography.X509Certificates;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -26,6 +27,22 @@
 
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<SubCategory> SubCategories { get; set; }
+
+        public DbSet<City> Cities { get; set; }
+
+        public DbSet<Announcement> Announcements { get; set; }
+
+        public DbSet<Review> Reviews { get; set; }
+
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<Tag> Tags { get; set; }
+
+        public DbSet<AnnouncementTag> AnnouncementTags { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -47,6 +64,11 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // Model configuratioins,relations conf.
+            builder.Entity<AnnouncementTag>()
+                .HasKey(x => new { x.AnnouncementId, x.TagId });
+
+
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
 
