@@ -36,4 +36,17 @@
     <ProjectReference Include="..\EasyServices.Web.Infrastructure\EasyServices.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\EasyServices.Web.ViewModels\EasyServices.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Categories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\bootstrap.minty.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\css\style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
