@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     using EasyServices.Data.Common.Models;
 
     public class Category : BaseDeletableModel<int>
@@ -13,7 +14,7 @@
         }
 
         [Required]
-        [MaxLength(30)]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         public string ImgUrl { get; set; }

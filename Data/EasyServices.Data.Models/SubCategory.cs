@@ -12,7 +12,7 @@
         }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         public string ImgUrl { get; set; }
