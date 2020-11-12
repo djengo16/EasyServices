@@ -30,10 +30,9 @@
             return this.categoriesRepository.All().ToList();
         }
 
-        // TODO: fix this method
-        public string GetShort<T>(IEnumerable<T> input, int length)
+        public string GetShort<T>(IEnumerable<T> input)
         {
-            return string.Join(", ", input).Substring(0, length) + "...";
+            return string.Join(", ", input.Take(8)) + " ...";
         }
 
         public string GetNameById(int id)

@@ -1,0 +1,17 @@
+﻿@model AspNetCoreTemplate.Web.ViewModels.Categories.GetAllCategoriesViewModel
+@using System.Linq;
+@using System;
+@inject AspNetCoreTemplate.Services.Data.ICategoriesService CategoriesService
+
+<div class="box_wrapper">
+    @foreach (var category in Model.Categories)
+    {
+        <a class="box" href="/Categories/ById/@category.Id">
+            <figure>
+                <img src="@category.ImgUrl" alt="">
+            </figure>
+            <span class="title">@category.Name</span>
+            <span class="txt">@CategoriesService.GetShort(category.SubCategories.Select(x => x.Name).ToList())</span>
+        </a>
+    }
+</div>
