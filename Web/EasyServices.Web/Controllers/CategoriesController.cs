@@ -18,9 +18,10 @@
 
         public IActionResult All()
         {
-            var model = this.categoriesService.GetAll<CategoryViewModel>();
-
-            this.categoriesService.GetShort<CategoryViewModel>(model, 60);
+            var model = new GetAllCategoriesViewModel
+            {
+                Categories = this.categoriesService.GetAll<CategoryViewModel>(),
+            };
 
             return this.View(model);
         }

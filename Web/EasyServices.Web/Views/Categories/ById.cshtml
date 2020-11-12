@@ -1,0 +1,16 @@
+﻿@model EasyServices.Web.ViewModels.SubCategories.GetAllSubCategoriesViewModel
+
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/Categories/All">Категории</a></li>
+    <li class="breadcrumb-item active">@Model.CategoryName</li>
+</ol>
+<div class="box_wrapper">
+    @foreach (var subCategory in Model.SubCategories)
+    {
+        <a class="box" href="/SubCategories/ById/@subCategory.Id">
+            <span class="title">@subCategory.Name</span>
+            <span class="txt">Брой обяви: @subCategory.AnnouncementsCount</span>
+        </a>
+    }
+</div>

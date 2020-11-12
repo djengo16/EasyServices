@@ -1,7 +1,6 @@
-﻿@model AspNetCoreTemplate.Web.ViewModels.Categories.GetAllCategoriesViewModel
+﻿@model EasyServices.Web.ViewModels.Categories.GetAllCategoriesViewModel
 @using System.Linq;
-@using System;
-@inject AspNetCoreTemplate.Services.Data.ICategoriesService CategoriesService
+@inject EasyServices.Services.Data.ICategoriesService CategoriesService
 
 <div class="box_wrapper">
     @foreach (var category in Model.Categories)

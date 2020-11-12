@@ -38,10 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Categories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="wwwroot\css\bootstrap.minty.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

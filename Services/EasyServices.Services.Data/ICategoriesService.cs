@@ -8,7 +8,7 @@
     {
         IEnumerable<T> GetAll<T>();
 
-        string GetShort<T>(IEnumerable<T> input, int length);
+        string GetShort<T>(IEnumerable<T> input);
 
         string GetNameById(int id);
 

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EasyServices.Web.ViewModels.Categories
+﻿namespace EasyServices.Web.ViewModels.Categories
 {
-    class GetAllCategoriesViewModel
+    using System.Collections.Generic;
+
+    public class GetAllCategoriesViewModel
     {
+        public IEnumerable<CategoryViewModel> Categories { get; set; }
     }
 }
