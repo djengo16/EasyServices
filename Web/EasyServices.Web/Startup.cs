@@ -1,7 +1,7 @@
 ﻿namespace EasyServices.Web
 {
     using System.Reflection;
-
+    using CloudinaryDotNet;
     using EasyServices.Data;
     using EasyServices.Data.Common;
     using EasyServices.Data.Common.Repositories;
@@ -55,6 +55,16 @@
             services.AddRazorPages();
 
             services.AddSingleton(this.configuration);
+
+            // Cloudinary account reg
+            Account account = new Account(
+                       this.configuration["Cloudinary:AppName"],
+                       this.configuration["Cloudinary:ApiKey"],
+                       this.configuration["Cloudinary:ApiSecret"]);
+
+            Cloudinary cloudinary = new Cloudinary(account);
+
+            services.AddSingleton(cloudinary);
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
