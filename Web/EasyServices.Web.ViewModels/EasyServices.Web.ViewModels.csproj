@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\EasyServices.Data.Models\EasyServices.Data.Models.csproj" />
+    <ProjectReference Include="..\..\EasyServices.Common\EasyServices.Common.csproj" />
     <ProjectReference Include="..\..\Services\EasyServices.Services.Mapping\EasyServices.Services.Mapping.csproj" />
   </ItemGroup>
 
