@@ -2,14 +2,15 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using EasyServices.Data.Common.Models;
 
-    public class Tag : BaseDeletableModel<int>
+    public class Tag
     {
         public Tag()
         {
             this.Tags = new HashSet<AnnouncementTag>();
         }
+
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
