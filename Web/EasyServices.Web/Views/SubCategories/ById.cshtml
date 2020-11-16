@@ -1,0 +1,63 @@
+﻿@model EasyServices.Web.ViewModels.Announcements.GetAllAnnouncementsViewModel
+@inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Identity
+@using EasyServices.Data.Models
+@{
+    var userId = UserManager.GetUserId(User);
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/Categories/All">Категории</a></li>
+    <li class="breadcrumb-item"><a href="/Categories/ById?Id=@Model.CategoryId">@Model.CategoryName</a></li>
+    <li class="breadcrumb-item active">@Model.SubCategoryName</li>
+</ol>
+
+@if (!Model.Announcements.Any())
+{
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Няма добавени обяви!</h4>
+    </div>
+}
+
+<div class="container small">
+    <div class="card-deck small align-items-start row">
+        @foreach (var announcement in Model.Announcements)
+        {
+            <div class="card mt-5 col-md-3" style=" height: initial;padding:0;">
+                <img class="card-img-top card-img" src="@announcement.MainImage" alt="" style="object-fit: cover; height: 200px; object-position:top center">
+                <div class="card-body">
+                    <h5 class="card-title">@announcement.Title</h5>
+                    <div>
+                        <i class="fas fa-star">@announcement.ReviewsCount</i>
+                    </div>
+                    @if (announcement.CityName != null)
+                    {
+                        <div>
+                            <i class="fas fa-map-marker-alt">@announcement.CityName</i>
+                        </div>
+                    }
+                    <div>
+                        <i class="fas fa-user"></i>
+                        <p style="display: inline-block"> @announcement.UserName</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar-alt">@announcement.CreatedOn</i>
+                    </div>
+                    <hr />
+                    <a href="/Announcements/Details/@announcement.Id" class="btn btn-primary">@announcement.PriceAsString</a>
+
+                    @if (User.IsInRole("Administrator") || announcement.UserId == userId)
+                    {
+                        <hr />
+                        <a asp-controller="Announcements" asp-action="Delete" asp-route-id="@announcement.Id" class="btn btn-danger">Изтрий</a>
+                        <a asp-controller="Announcements" asp-action="Edit" asp-route-id="@announcement.Id" class="btn btn-info">Редактирай</a>
+                    }
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

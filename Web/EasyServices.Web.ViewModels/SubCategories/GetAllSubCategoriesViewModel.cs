@@ -2,10 +2,25 @@
 {
     using System.Collections.Generic;
 
-    public class GetAllSubCategoriesViewModel
+    using EasyServices.Data.Models;
+    using EasyServices.Services.Mapping;
+
+    public class SubCategoryViewModel : IMapFrom<SubCategory>
     {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public int AnnouncementsCount { get; set; }
+
         public string CategoryName { get; set; }
 
-        public IEnumerable<SubCategoryViewModel> SubCategories { get; set; }
+        public int CategoryId { get; set; }
+
+        public int PagesCount { get; set; }
+
+        public int CurrentPage { get; set; }
+
+        public IEnumerable<AnnouncementInSubCategoryViewModel> ServiceAnnouncements { get; set; }
     }
 }

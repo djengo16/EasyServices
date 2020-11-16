@@ -1,5 +1,6 @@
 ﻿namespace EasyServices.Services.Data
 {
+
     using System.Collections.Generic;
 
     public interface ISubCategoriesService
@@ -13,5 +14,9 @@
         int GetCategoryId(int subcategoryId);
 
         int GetIdByName(string name);
+
+        T GetById<T>(int id);
+
+
     }
 }
