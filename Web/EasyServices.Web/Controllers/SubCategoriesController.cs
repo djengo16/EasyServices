@@ -1,11 +1,15 @@
 ﻿namespace EasyServices.Web.Controllers
 {
     using EasyServices.Services.Data;
-    using EasyServices.Web.ViewModels.Announcements;
+    using EasyServices.Web.ViewModels.SubCategories;
     using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Linq;
 
     public class SubCategoriesController : BaseController
     {
+        private const int AnnouncementsPerPage = 6;
+
         private readonly IAnnouncementsService announcementsService;
         private readonly ISubCategoriesService subCategoriesService;
 
@@ -17,16 +21,19 @@
             this.subCategoriesService = subCategoriesService;
         }
 
-        public IActionResult ById(int id)
+        public IActionResult ById(int id, int page = 1)
         {
-            var model = new GetAllAnnouncementsViewModel
-            {
-                CategoryName = this.subCategoriesService.GetCategoryName(id),
-                SubCategoryName = this.subCategoriesService.GetNameById(id),
-                CategoryId = this.subCategoriesService.GetCategoryId(id),
-                Announcements = this.announcementsService.GetAllBySubCategoryId<AnnouncementViewModel>(id),
-            };
+            var model = this.subCategoriesService.GetById<SubCategoryViewModel>(id);
 
+            model.ServiceAnnouncements = this.announcementsService
+                .GetAllBySubCategoryId<AnnouncementViewModel>(id, AnnouncementsPerPage, (page - 1) * AnnouncementsPerPage);
+
+            int count = this.announcementsService.GetCountBySubCategoryId(id);
+
+            model.PagesCount = (int)Math.Ceiling((double)count / AnnouncementsPerPage);
+
+            model.CurrentPage = page;
+            ;
             return this.View(model);
         }
     }

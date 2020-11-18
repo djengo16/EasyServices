@@ -1,6 +1,7 @@
-﻿namespace AspNetCoreTemplate.Services
+﻿namespace EasyServices.Services
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.IO;
     using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@
             return images;
         }
 
-        public static async Task<string> UploadFileAsync(Cloudinary cloudinary, IFormFile file)
+        public static async Task<string> UploadFileAsync(Cloudinary cloudinary, IFormFile file, bool isProfilePicture)
         {
             byte[] byteImage;
 
@@ -51,11 +52,25 @@
 
             using var destinationStram = new MemoryStream(byteImage);
 
-            var uploadParams = new ImageUploadParams()
+            ImageUploadParams uploadParams;
+
+            if (!isProfilePicture)
             {
-                File = new FileDescription(file.FileName, destinationStram),
-                Transformation = new Transformation().Width(200).Height(200),
-            };
+                uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(file.FileName, destinationStram),
+                    Transformation = new Transformation().Width(500).Height(400).Quality("auto"),
+                };
+            }
+            else
+            {
+                uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(file.FileName, destinationStram),
+                    Transformation = new Transformation().Width(200).Height(200),
+                };
+            }
+
             var result = await cloudinary.UploadAsync(uploadParams);
 
             return result.Uri.AbsoluteUri;
