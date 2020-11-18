@@ -13,59 +13,61 @@
 </ol>
 
 
-<div class="row row-cols-1 row-cols-md-3">
-    <partial name="_Announcement">
-</div>
 
-<nav>
-    <ul class="pagination justify-content-center">
-        @if (this.Model.CurrentPage == 1)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">Previous</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link"
-                   asp-controller="SubCategories"
-                   asp-action="ById"
-                   asp-route-id="@Model.Id"
-                   asp-route-page="@(Model.CurrentPage - 1)">Предишна</a>
-            </li>
-        }
-        @for (int i = 1; i <= Model.PagesCount; i++)
-        {
-            var active = Model.CurrentPage == i ? "active" : string.Empty;
+<partial name="_Announcement">
 
-            <li class="page-item @active">
-                <a class="page-link"
-                   asp-controller="SubCategories"
-                   asp-action="ById"
-                   asp-route-id="@Model.Id"
-                   asp-route-page="@i">
-                    @i
-                </a>
-            </li>
-        }
-        @if (this.Model.CurrentPage == this.Model.PagesCount)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link"
-                   asp-controller="SubCategories"
-                   asp-action="ById"
-                   asp-route-id="@Model.Id"
-                   asp-route-page="@(Model.CurrentPage + 1)">
-                    Следваща
-                </a>
-            </li>
-        }
-    </ul>
-</nav>
+    @if (Model.PagesCount > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                @if (this.Model.CurrentPage == 1)
+                {
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-controller="SubCategories"
+                           asp-action="ById"
+                           asp-route-id="@Model.Id"
+                           asp-route-page="@(Model.CurrentPage - 1)">Предишна</a>
+                    </li>
+                }
+                @for (int i = 1; i <= Model.PagesCount; i++)
+                {
+                    var active = Model.CurrentPage == i ? "active" : string.Empty;
+
+                    <li class="page-item @active">
+                        <a class="page-link"
+                           asp-controller="SubCategories"
+                           asp-action="ById"
+                           asp-route-id="@Model.Id"
+                           asp-route-page="@i">
+                            @i
+                        </a>
+                    </li>
+                }
+                @if (this.Model.CurrentPage == this.Model.PagesCount)
+                {
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-controller="SubCategories"
+                           asp-action="ById"
+                           asp-route-id="@Model.Id"
+                           asp-route-page="@(Model.CurrentPage + 1)">
+                            Следваща
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }

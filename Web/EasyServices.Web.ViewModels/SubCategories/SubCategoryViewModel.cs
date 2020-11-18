@@ -5,8 +5,9 @@
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
     using EasyServices.Web.ViewModels.Announcements;
+    using AutoMapper;
 
-    public class SubCategoryViewModel : IMapFrom<SubCategory>
+    public class SubCategoryViewModel : IMapFrom<SubCategory>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -22,6 +23,12 @@
 
         public int CurrentPage { get; set; }
 
-        public IEnumerable<AnnouncementViewModel> ServiceAnnouncements { get; set; }
+        public IEnumerable<AnnouncementViewModel> Announcements { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<SubCategory, SubCategoryViewModel>()
+                .ForMember(x => x.Announcements, opt => opt.Ignore());
+        }
     }
 }
