@@ -13,8 +13,8 @@
         private readonly ICategoriesService categoriesService;
 
         public SubCategoriesService(
-            IDeletableEntityRepository<SubCategory> subCategoriesRepository,
-            ICategoriesService categoriesService)
+            IDeletableEntityRepository<SubCategory> subCategoriesRepository
+            , ICategoriesService categoriesService)
         {
             this.subCategoriesRepository = subCategoriesRepository;
             this.categoriesService = categoriesService;
@@ -51,6 +51,15 @@
         public int GetIdByName(string name)
         {
             return this.subCategoriesRepository.All().FirstOrDefault(x => x.Name.ToLower() == name.ToLower()).Id;
+        }
+
+        public T GetById<T>(int id)
+        {
+            var category = this.subCategoriesRepository.All()
+               .Where(x => x.Id == id)
+               .To<T>().FirstOrDefault();
+
+            return category;
         }
     }
 }

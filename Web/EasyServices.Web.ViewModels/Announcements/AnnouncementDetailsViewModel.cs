@@ -3,11 +3,11 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using AutoMapper;
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
+    using EasyServices.Web.ViewModels.Reviews;
     using EasyServices.Web.ViewModels.Users;
-
-    using AutoMapper;
     using Ganss.XSS;
 
     public class AnnouncementDetailsViewModel : IMapFrom<Announcement>, IHaveCustomMappings
@@ -36,7 +36,7 @@
 
         public ICollection<Image> Images { get; set; }
 
-        public ICollection<AnnouncementReviewViewModel> Reviews { get; set; }
+        public ICollection<ReviewInAnnouncementViewModel> Reviews { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

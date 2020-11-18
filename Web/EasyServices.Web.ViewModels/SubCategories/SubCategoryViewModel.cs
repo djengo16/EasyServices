@@ -4,6 +4,7 @@
 
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
+    using EasyServices.Web.ViewModels.Announcements;
 
     public class SubCategoryViewModel : IMapFrom<SubCategory>
     {

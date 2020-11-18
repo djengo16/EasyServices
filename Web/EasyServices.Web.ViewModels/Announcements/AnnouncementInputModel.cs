@@ -6,9 +6,9 @@
     using EasyServices.Common;
     using Microsoft.AspNetCore.Http;
 
-    public class CreateAnnouncementInputModel
+    public class AnnouncementInputModel
     {
-        public CreateAnnouncementInputModel()
+        public AnnouncementInputModel()
         {
             this.CitiesItems = new List<KeyValuePair<string, string>>();
         }
