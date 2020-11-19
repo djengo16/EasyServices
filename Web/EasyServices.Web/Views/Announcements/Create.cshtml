@@ -1,0 +1,120 @@
+﻿@using EasyServices.Web.ViewModels.Announcements
+
+@inject EasyServices.Services.Data.ICategoriesService categoriesService
+@model AnnouncementInputModel
+
+@{
+
+    var cityItems = this.Model.CitiesItems.OrderBy(x => x.Value).Select(x => new SelectListItem(x.Value, x.Key));
+}
+<script src="/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "image paste table link code media"
+        ]
+    });
+</script>
+
+
+<style>
+    .mul-select {
+        width: 100%;
+    }
+</style>
+
+<h1 class="bg-info">Добави обява</h1>
+
+<form method="post" class="form-group col-md-8 offset-md-2" enctype="multipart/form-data">
+    <div class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Title"> </label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.CityId"></label>
+        <select asp-for="@Model.CityId" title="Изберете град" asp-items="cityItems" class="form-control">
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.SubCategoryId"></label>
+        <select asp-for="@Model.SubCategoryId" title="Категория" class="form-control">
+            <option></option>
+            @foreach (var category in Model.Categories)
+            {
+
+                <optgroup label="@category.Name">
+
+                    @foreach (var subCategory in category.SubCategories)
+                    {
+                        <option value="@subCategory.Id">@subCategory.Name</option>
+                    }
+                </optgroup>
+            }
+        </select>
+        <span asp-validation-for="@Model.SubCategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group"></div>
+    <label asp-for="@Model.Tags"></label>
+    <select asp-for="@Model.Tags" title="Тагове към обявата" class="form-control mul-select" multiple="true">
+        @foreach (var tag in Model.TagsItems)
+        {
+            <option value="@tag.Name">@tag.Name</option>
+        }
+    </select>
+    <br />
+    <br />
+
+
+
+
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <div class="form-group">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">лв</span>
+                </div>
+                <input asp-for="Price" type="number" class="form-control" aria-label="Amount (to the nearest dollar)">
+                <div class="input-group-append cc_cursor">
+                    <span class="input-group-text">.00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Images"></label>
+        <input asp-for="Images" class="form-control" multiple />
+    </div>
+    <input type="submit" class="btn btn-primary" />
+</form>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            $(".mul-select").select2({
+                placeholder: "Добавете тагове", //placeholder
+                tags: true,
+                tokenSeparators: ['/', ',', ';', " "]
+            });
+        })
+    </script>
+}
