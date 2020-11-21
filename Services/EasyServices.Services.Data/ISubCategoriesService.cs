@@ -1,7 +1,9 @@
 ﻿namespace EasyServices.Services.Data
 {
-
+    using System.Threading.Tasks;
     using System.Collections.Generic;
+
+    using EasyServices.Web.ViewModels.Administration.SubCategories;
 
     public interface ISubCategoriesService
     {
@@ -17,6 +19,11 @@
 
         T GetById<T>(int id);
 
+        Task AddSubCategory(AddSubCategoryInputModel inputModel);
+
+        Task EditSubCategory(EditSubCategoryModel inputModel);
+
+        Task DeleteSubCategory(int categoryId);
 
     }
 }

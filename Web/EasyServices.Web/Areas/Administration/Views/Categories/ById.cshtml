@@ -1,0 +1,58 @@
+﻿@model EasyServices.Web.ViewModels.Administration.SubCategories.SubCategoryIndexModel
+@{
+    this.ViewData["Title"] = "Админ панел";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<h5>Под Категоря на @Model.CategoryName</h5>
+
+
+@foreach (var category in Model.SubCategories)
+{
+    <form method="get">
+        <div asp-validation-summary="All"></div>
+        <div class="form-row">
+            <div class="col-3">
+                <input asp-for="EditSubCategoryModel.Name"
+                       value="@category.Name"
+                       name="Name" class="form-control">
+                <span class="text-danger"></span>
+            </div>
+
+            <input type="hidden" name="id" value="6" />
+            <button asp-controller="SubCategories"
+                    asp-action="Edit"
+                    asp-route-id="@category.Id"
+                    asp-route-name="@category.Name"
+                    class="btn btn-info mr-1  mb-3">
+                Промени
+            </button>
+            <button asp-controller="SubCategories"
+                    asp-action="Delete"
+                    asp-route-id="@category.Id"
+                    class="btn btn-danger  mr-1  mb-3">
+                Изтрий
+            </button>
+        </div>
+    </form>
+    <button class="btn btn-secondary mr-1  mb-3">Обяви(@category.AnnouncementsCount)</button>
+    <hr />
+}
+<form method="post" asp-controller="SubCategories" asp-action="Create" asp-route-categoryid="@Model.CategoryId">
+    <div asp-validation-summary="All"></div>
+    <div class="form-row">
+        <div class="col-5">
+            <label asp-for="AddSubCategoryInputModel.Name"></label>
+            <input asp-for="AddSubCategoryInputModel.Name"
+                   name="Name" class="form-control">
+            <span class="text-danger"></span>
+        </div>
+        <input value="Добави" type="submit" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

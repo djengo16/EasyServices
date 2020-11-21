@@ -1,7 +1,81 @@
 ﻿@model EasyServices.Web.ViewModels.Administration.Dashboard.IndexViewModel
 @{
-    this.ViewData["Title"] = "Admin dashboard";
+    this.ViewData["Title"] = "Админ панел";
 }
 
 <h1>@this.ViewData["Title"]</h1>
-Settings: @this.Model.SettingsCount
+<h5>Категори</h5>
+
+
+@foreach (var category in Model.Categories)
+{
+    <form>
+        <div asp-validation-summary="All"></div>
+        <div class="form-row">
+            <div class="col-3">
+                <input asp-for="EditCategoryModel.Name"
+                       value="@category.Name"
+                       name="Name" class="form-control">
+                <span class="text-danger"></span>
+            </div>
+            <div class="col-4">
+                <input asp-for="EditCategoryModel.ImgUrl"
+                       value="@category.ImgUrl"
+                       name="ImgUrl" class="form-control">
+                <span class="text-danger"></span>
+            </div>
+            <div class="col-md-1">
+                <img src="@category.ImgUrl"
+                     style="width: 50%;"
+                     class="rounded" alt="...">
+            </div>
+
+            @*<input type="hidden" name="id" value="6" />*@
+            <button asp-controller="Categories"
+                    asp-action="Edit"
+                    asp-route-id="@category.Id"
+                    asp-route-name="@category.Name"
+                    asp-route-ImgUrl="@category.ImgUrl"
+                    class="btn btn-info mr-1  mb-3">
+                Промени
+            </button>
+            <button asp-controller="Categories"
+                    asp-action="Delete"
+                    asp-route-id="@category.Id"
+                    class="btn btn-danger  mr-1  mb-3">
+                Изтрий
+            </button>
+        </div>
+    </form>
+    <a class="btn btn-secondary mr-1  mb-3"
+            asp-controller="Categories"
+            asp-action="ById"
+            asp-route-id="@category.Id">
+        Подкатегории(@category.SubCategories.Count())
+    </a>
+    <hr />
+}
+<form method="post" asp-controller="Categories" asp-action="Create">
+    <div asp-validation-summary="All"></div>
+    <div class="form-row">
+        <div class="col-5">
+            <label asp-for="AddCategoryModel.Name"></label>
+            <input asp-for="AddCategoryModel.Name"
+                   name="Name" class="form-control">
+            <span class="text-danger"></span>
+        </div>
+        <div class="col-5">
+            <label asp-for="AddCategoryModel.ImgUrl"></label>
+            <input asp-for="AddCategoryModel.ImgUrl"
+                   name="ImgUrl" class="form-control">
+            <span class="text-danger"></span>
+        </div>
+        <input value="Добави" type="submit" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

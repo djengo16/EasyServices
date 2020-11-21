@@ -2,10 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Threading.Tasks;
     using EasyServices.Data.Common.Repositories;
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
+    using EasyServices.Web.ViewModels.Administration.SubCategories;
 
     public class SubCategoriesService : ISubCategoriesService
     {
@@ -60,6 +61,40 @@
                .To<T>().FirstOrDefault();
 
             return category;
+        }
+
+        private SubCategory GetById(int id)
+        {
+            return this.subCategoriesRepository.All().FirstOrDefault(x => x.Id == id);
+        }
+
+        public async Task AddSubCategory(AddSubCategoryInputModel inputModel)
+        {
+            await this.subCategoriesRepository.AddAsync(new SubCategory
+            {
+                Name = inputModel.Name,
+                CategoryId = inputModel.CategoryId,
+            });
+
+            await this.subCategoriesRepository.SaveChangesAsync();
+        }
+
+        public async Task EditSubCategory(EditSubCategoryModel inputModel)
+        {
+            var subCategory = this.GetById(inputModel.Id);
+
+            subCategory.Name = inputModel.Name;
+
+            this.subCategoriesRepository.Update(subCategory);
+            await this.subCategoriesRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteSubCategory(int categoryId)
+        {
+            var subCategory = this.GetById(categoryId);
+
+            this.subCategoriesRepository.Delete(subCategory);
+            await this.subCategoriesRepository.SaveChangesAsync();
         }
     }
 }

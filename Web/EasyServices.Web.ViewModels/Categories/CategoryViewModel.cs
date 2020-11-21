@@ -1,5 +1,6 @@
 ﻿namespace EasyServices.Web.ViewModels.Categories
 {
+    using System;
     using System.Collections.Generic;
 
     using EasyServices.Data.Models;
@@ -13,6 +14,8 @@
         public string Name { get; set; }
 
         public string ImgUrl { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public IEnumerable<SubCategoryViewModel> SubCategories { get; set; }
     }
