@@ -35,7 +35,7 @@
             </button>
         </div>
     </form>
-    <button class="btn btn-secondary mr-1  mb-3">Обяви(@category.AnnouncementsCount)</button>
+    <a href="/SubCategories/ById/@category.Id"  mb-3">Обяви(@category.AnnouncementsCount)</a>
     <hr />
 }
 <form method="post" asp-controller="SubCategories" asp-action="Create" asp-route-categoryid="@Model.CategoryId">
