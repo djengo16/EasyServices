@@ -61,3 +61,100 @@
     padding: 0;
 }
 
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+
+    .rate:not(:checked) > input {
+        position: absolute;
+        top: -9999px;
+    }
+
+    .rate:not(:checked) > label {
+        float: right;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 30px;
+        color: #ccc;
+    }
+
+        .rate:not(:checked) > label:before {
+            content: '★ ';
+        }
+
+    .rate > input:checked ~ label {
+        color: #ffc700;
+    }
+
+    .rate:not(:checked) > label:hover,
+    .rate:not(:checked) > label:hover ~ label {
+        color: #deb217;
+    }
+
+    .rate > input:checked + label:hover,
+    .rate > input:checked + label:hover ~ label,
+    .rate > input:checked ~ label:hover,
+    .rate > input:checked ~ label:hover ~ label,
+    .rate > label:hover ~ input:checked ~ label {
+        color: #c59b08;
+    }
+
+
+/* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
+.is-tag {
+    background-color: #eff9fe;
+    border-radius: 5px;
+    padding: 5px 7px 5px 7px;
+    font-weight: bold;
+}
+
+.feedback-card {
+    background-color: #f8f8f8;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+    .feedback-card .header {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .feedback-card .header h4 {
+            font-size: 14px;
+            line-height: 14px;
+            font-weight: 700;
+            display: block;
+            padding-left: 10px;
+            margin-left: 10px;
+            margin: 0;
+        }
+
+        .feedback-card .header div {
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback-card .header span:after {
+            content: "";
+            background-image: url(https://www.flaticon.com/svg/static/icons/svg/616/616655.svg);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            background-size: contain;
+            margin-left: 10px;
+            width: 16px;
+            height: 16px;
+            padding: 10px;
+            margin-bottom: 3px;
+        }
+
+.user-avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50% !important;
+}

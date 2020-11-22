@@ -84,6 +84,7 @@
         public async Task<IActionResult> OnPostAsync(IFormFile file)
         {
 
+            ;
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -124,7 +125,7 @@
 
             if (file != null)
             {
-                await CloudinaryHelper.RemoveFileAsync(this.cloudinary, user.ProfilePicture); // Deleting the old img
+             //  await CloudinaryHelper.RemoveFileAsync(this.cloudinary, user.ProfilePicture); // Deleting the old img
 
                 var imageUrl = await CloudinaryHelper.UploadFileAsync(this.cloudinary, file, true);
                 user.ProfilePicture = imageUrl;

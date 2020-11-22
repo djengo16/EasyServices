@@ -1,44 +1,56 @@
 ﻿@inject UserManager<ApplicationUser> UserManager
+
 @using EasyServices.Data.Models
 @using Microsoft.AspNetCore.Identity
+
 @{
     var userId = UserManager.GetUserId(User);
 }
-<div class="row row-cols-1 row-cols-md-3">
 
-    @foreach (var announcement in Model.Announcements)
-    {
-        <div class="col mb-4">
-            <div class="card h-100">
-                <img class="card-img-top card-img" src="@announcement.MainImage" style="object-fit: cover; height: 200px; object-position:top center">
-                <div class="card-body">
-                    <h5 class="card-title">@announcement.Title</h5>
-                    <div>
-                        <i class="fas fa-star">@announcement.ReviewsCount</i>
-                    </div>
-                    @if (announcement.CityName != null)
-                    {
-                        <div>
-                            <i class="fas fa-map-marker-alt">@announcement.CityName</i>
-                        </div>
-                    }
-                    <div>
-                        <i class="fas fa-user"></i>
-                        <a asp-controller="Users" asp-action="Profile" asp-route-id="@announcement.UserId" style="display: inline-block"> @announcement.Username</a>
-                    </div>
-                    <div>
-                        <i class="fas fa-calendar-alt">@announcement.CreatedOn</i>
-                    </div>
-                    <hr />
-                    <a asp-controller="Announcements" asp-action="Details" asp-route-id="@announcement.Id" class="btn-sm btn-primary">@announcement.PriceAsString</a>
+<div class="col mb-4" style="float:left">
+    <div class="card h-100">
 
-                    @if (User.IsInRole("Administrator") || announcement.UserId == userId)
-                    {
-                        <a asp-controller="Announcements" asp-action="Delete" asp-route-id="@announcement.Id" class="btn-sm btn-danger">Изтрий</a>
-                        <a asp-controller="Announcements" asp-action="Edit" asp-route-id="@announcement.Id" class="btn-sm btn-info">Редактирай</a>
-                    }
-                </div>
+        <img class="card-img-top card-img" src="@Model.MainImage"
+             style="object-fit: cover; height: 200px; object-position:top center">
+
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <div>
+                <i class="fas fa-star">@Model.ReviewsCount</i>
             </div>
+            @if (Model.CityName != null)
+            {
+                <div>
+                    <i class="fas fa-map-marker-alt">@Model.CityName</i>
+                </div>
+            }
+            <div>
+                <i class="fas fa-user"></i>
+                <a asp-controller="Users" 
+                   asp-action="Profile" 
+                   asp-route-id="@Model.UserId" 
+                   style="display: inline-block"> @Model.Username</a>
+            </div>
+            <div>
+                <i class="fas fa-calendar-alt">@Model.CreatedOn</i>
+            </div>
+            <hr />
+            <a asp-controller="Announcements" 
+               asp-action="Details" 
+               asp-route-id="@Model.Id" 
+               class="btn-sm btn-primary">@Model.PriceAsString</a>
+
+            @if (User.IsInRole("Administrator") || Model.UserId == userId)
+            {
+                <a asp-controller="Announcements" 
+                   asp-action="Delete" 
+                   asp-route-id="@Model.Id" 
+                   class="btn-sm btn-danger">Изтрий</a>
+                <a asp-controller="Announcements" 
+                   asp-action="Edit" 
+                   asp-route-id="@Model.Id" 
+                   class="btn-sm btn-info">Редактирай</a>
+            }
         </div>
-    }
+    </div>
 </div>
