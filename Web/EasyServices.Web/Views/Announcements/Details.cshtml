@@ -1,0 +1,240 @@
+﻿@using EasyServices.Web.ViewModels.Announcements
+@using EasyServices.Common
+@model AnnouncementDetailsViewModel
+@inject UserManager<ApplicationUser> UserManager
+
+@using EasyServices.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@{
+    var userId = UserManager.GetUserId(User);
+    string type = "active";
+}
+
+<section class="container mt-5">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <h1 class="is-bold">@Model.Title</h1>
+            <p><a href="/SubCategories/ById/@Model.SubCategoryId">@Model.SubCategoryName</a></p>
+            <div class="is-account-box mt-4">
+                <div class="row">
+                    <div class="col-3 col-md-3">
+                        <img class="user-avatar-big w-100 rounded" src="@Model.User.ProfilePicture" style="" alt="">
+                    </div>
+                    <div class="col-9 col-md-6">
+                        <div class="profile">
+                            <div class="profile-name">
+                                <a asp-controller="Users" asp-action="Profile" asp-route-id="@Model.User.Id">@Model.User.Name</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <div class="rating d-flex w-100">
+                            <img class="w-25" src="@GlobalConstants.AnnouncementStarImg" alt="">
+                            <div style="font-size: 30px;line-height: 30px;font-weight: 700;margin-left: 5px;float: left;color: #000">@Model.TotalRating</div>
+                        </div>
+
+                        @if (Model.ReviewsCount == 1)
+                        {
+                            @Model.ReviewsCount <small>Оценка</small>
+                        }
+                        else
+                        {
+                            @Model.ReviewsCount <small>Оценки</small>
+                        }
+
+                    </div>
+                </div>
+
+
+                <div class="row mt-2">
+                    <div class="col-lg-10">
+                        <hr />
+                        @if (Model.CityName != null)
+                        {
+                            <img src="@GlobalConstants.LocationIcon" class="is-icon" alt>
+                            <strong class="after-icon is-place">@Model.CityName</strong>
+                        }
+                        <img src="@GlobalConstants.MailIcon" class="is-icon" alt>
+                        <strong class="after-icon is-place">@Model.User.Email</strong>
+                        <br /> <br />
+                        @if (Model.User.PhoneNumber != null)
+                        {
+                            <img src="@GlobalConstants.PhoneIcon" class="is-icon" alt>
+                            <strong class="after-icon is-place">@Model.User.PhoneNumber</strong>
+                        }
+                        @if (Model.User.WebSite != null)
+                        {
+                            <img src="@GlobalConstants.WebSiteIcon" class="is-icon" alt>
+                            <strong class="after-icon is-place"><a href="@Model.User.WebSite">@Model.User.WebSite</a></strong>
+                        }
+                        <hr />
+                    </div>
+                    <div class="col-12 mt-4">
+                        <!-- Button to Open the Modal -->
+                        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">
+                            Оценете услугата
+                        </button>
+                        <!-- The Modal -->
+                        <div class="modal" id="myModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <form asp-controller="Reviews" asp-action="Create" method="post">
+                                            <div class="col-12 mt-4">
+                                                <h5 class="font-weight-light">Оценете обяватa</h5>
+                                                <input type="hidden" name="AnnouncementId" value="@this.Model.Id" />
+                                                <div class="input-group mb-1">
+                                                    <div class="rate">
+                                                        <input type="radio" id="star5" name="rate" value="5" />
+                                                        <label for="star5" title="text">5 stars</label>
+                                                        <input type="radio" id="star4" name="rate" value="4" />
+                                                        <label for="star4" title="text">4 stars</label>
+                                                        <input type="radio" id="star3" name="rate" value="3" />
+                                                        <label for="star3" title="text">3 stars</label>
+                                                        <input type="radio" id="star2" name="rate" value="2" />
+                                                        <label for="star2" title="text">2 stars</label>
+                                                        <input type="radio" id="star1" name="rate" value="1" />
+                                                        <label for="star1" title="text">1 star</label>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label for="Comment"></label>
+                                                    <textarea placeholder="Коментар" maxlength="150" name="Comment" id="Comment" class="form-control"></textarea>
+                                                </div>
+
+                                                <br />
+                                                <input type="submit" class="btn btn-primary" />
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="col-md">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators carousel-service">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class=""></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1" class=""></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2" class=""></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        @foreach (var image in Model.Images)
+                        {
+
+                            <div class="carousel-item @type">
+                                <img class="d-block w-100 img-responsive img-service cropped" src="@image.Url" alt="">
+                                @if (User.IsInRole("Administrator") || Model.User.Id == userId)
+                                {
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <a class="small badge-danger"
+                                           asp-controller="Announcements"
+                                           asp-action="DeleteAnnouncementPhoto"
+                                           asp-route-imgUrl="@image.Url"
+                                           asp-route-announcementId="@Model.Id">Изтрий снимката</a>
+                                    </div>
+                                }
+                            </div>
+                            type = "";
+
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only"></span>
+                    </a>
+                </div>
+            </div>
+            @if (Model.Images.Count != 0)
+            {
+                <h6 class="font-italic col-md-6">Снимки на проекти</h6>
+            }
+        </div>
+    </div>
+</section>
+
+
+
+<section class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="has-description">
+                <h2>Oписание на услугата</h2>
+
+                <div class="row">
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <div class="is-tag mt-1 mr-1">
+                            <span class="badge badge-info">@tag</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @Html.Raw(Model.SanitizedDescription)
+
+    </div>
+</section>
+
+
+<section class="container">
+    <div class="row mt-5">
+        <div class="col"><h2 class="is-bold">Детайлен рейтинг</h2></div>
+    </div>
+    <div class="profile">
+        <div class="row mt-5 feedback-wrapper">
+            @foreach (var review in Model.Reviews)
+            {
+
+
+                <div class="col-12 col-md-6 col-xl-4 mb-3">
+                    <div class="feedback-card">
+                        <div class="header">
+                            <div>
+                                <img class="user-avatar" src="@review.UserProfilePicture">
+                                <h4>@review.UserName</h4>
+                            </div>
+                            <span>@review.Rating</span>
+                        </div>
+                        <p style="word-wrap: break-word;">@review.Comment</p>
+                        @if (User.IsInRole("Administrator") || review.UserId == userId)
+                        {
+                            <a asp-controller="Reviews"
+                               asp-action="Delete"
+                               asp-route-reviewId="@review.Id"
+                               asp-route-announcementId="@Model.Id"
+                               class="small">изтрий</a>
+                        }
+                    </div>
+
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
