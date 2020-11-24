@@ -1,6 +1,9 @@
 ﻿@using EasyServices.Web.ViewModels.Announcements
 @using EasyServices.Common
+<<<<<<< HEAD
 
+=======
+>>>>>>> cd939900f60f087cefee306cdeeeebb2bf2bb006
 @model AnnouncementDetailsViewModel
 @inject UserManager<ApplicationUser> UserManager
 
@@ -15,7 +18,11 @@
 <section class="container mt-5">
     <div class="row">
         <div class="col-12 col-md-6">
+<<<<<<< HEAD
             <h1 style="text-transform; " class="is-bold">@Model.Title</h1>
+=======
+            <h1 class="is-bold">@Model.Title</h1>
+>>>>>>> cd939900f60f087cefee306cdeeeebb2bf2bb006
             <p><a href="/SubCategories/ById/@Model.SubCategoryId">@Model.SubCategoryName</a></p>
             <div class="is-account-box mt-4">
                 <div class="row">
@@ -77,10 +84,13 @@
                         <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">
                             Оценете услугата
                         </button>
+<<<<<<< HEAD
                         @if (User.IsInRole("Administrator") || Model.User.Id == userId)
                         {
                             <a asp-controller="Announcements" asp-action="Edit" asp-route-id="@Model.Id" class="btn-sm btn-info">Редактирай обявата</a>
                         }
+=======
+>>>>>>> cd939900f60f087cefee306cdeeeebb2bf2bb006
                         <!-- The Modal -->
                         <div class="modal" id="myModal">
                             <div class="modal-dialog">
@@ -197,11 +207,20 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
     </div>
 </section>
 
 @Html.Raw(Model.SanitizedDescription)
 
+=======
+
+        @Html.Raw(Model.SanitizedDescription)
+
+    </div>
+</section>
+
+>>>>>>> cd939900f60f087cefee306cdeeeebb2bf2bb006
 
 <section class="container">
     <div class="row mt-5">
