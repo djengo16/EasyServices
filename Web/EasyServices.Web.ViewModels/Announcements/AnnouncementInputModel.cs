@@ -11,6 +11,7 @@
         public AnnouncementInputModel()
         {
             this.CitiesItems = new List<KeyValuePair<string, string>>();
+            this.Tags = new List<string>();
         }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = ErrorMessages.TitleIsRequired)]
@@ -20,6 +21,7 @@
         public string Title { get; set; }
 
         [Display(Name = "Описание")]
+        [MaxLength(1000)]
         public string Description { get; set; }
 
         [Display(Name = "Цена")]
@@ -28,7 +30,7 @@
         public string UserId { get; set; }
 
         [Display(Name = "Град")]
-        public int CityId { get; set; }
+        public int? CityId { get; set; }
 
         [Display(Name = "Категория")]
         [Required(AllowEmptyStrings = false, ErrorMessage = ErrorMessages.CategoryRequirement)]

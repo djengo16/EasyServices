@@ -1,14 +1,17 @@
 ﻿namespace EasyServices.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using CloudinaryDotNet;
+    using EasyServices.Data;
     using EasyServices.Data.Common.Repositories;
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
     using EasyServices.Web.ViewModels.Announcements;
-    using CloudinaryDotNet;
+    using Microsoft.EntityFrameworkCore;
 
     public class AnnouncementsService : IAnnouncementsService
     {
@@ -18,6 +21,7 @@
         private readonly ISubCategoriesService subCategoriesService;
         private readonly ITagsService tagsService;
         private readonly ICitiesService citiesService;
+        private readonly ApplicationDbContext context;
 
         public AnnouncementsService(
             IDeletableEntityRepository<Announcement> announcementsRepository,
@@ -25,7 +29,8 @@
             Cloudinary cloudinary,
             ISubCategoriesService subCategoriesService,
             ITagsService tagsService,
-            ICitiesService citiesService)
+            ICitiesService citiesService,
+            ApplicationDbContext context)
         {
             this.announcementsRepository = announcementsRepository;
             this.imagesRepository = imagesRepository;
@@ -33,6 +38,7 @@
             this.subCategoriesService = subCategoriesService;
             this.tagsService = tagsService;
             this.citiesService = citiesService;
+            this.context = context;
         }
 
         public async Task<string> CreateAsync(AnnouncementInputModel announcementInputModel)
@@ -94,6 +100,11 @@
             return this.announcementsRepository.All().Count(x => x.SubCategoryId == subCategoryId);
         }
 
+        public Announcement GetById(string id)
+        {
+            return this.announcementsRepository.All().FirstOrDefault(x => x.Id == id);
+        }
+
         public T GetDetails<T>(string id)
         {
             var announcement =
@@ -106,7 +117,7 @@
             return announcement;
         }
 
-        public async Task<string> UpdateAsync(AnnouncementInputModel announcementInputModel, string id)
+        public async Task<string> UpdateAsync(UpdateAnnouncementViewModel announcementInputModel, string id)
         {
             var announcement = this.announcementsRepository.All().FirstOrDefault(x => x.Id == id);
 
@@ -118,6 +129,9 @@
             announcement.CityId = announcementInputModel.CityId;
 
             await this.AddImagesToAnnouncement(announcementInputModel, announcement);
+
+            this.context.AnnouncementTags
+                .RemoveRange(this.context.AnnouncementTags.Where(x => x.AnnouncementId == announcement.Id).ToList());
 
             await this.GetOrCreateTags(announcementInputModel, announcement);
 
@@ -135,6 +149,42 @@
             await this.imagesRepository.SaveChangesAsync();
 
             await CloudinaryHelper.RemoveFileAsync(this.cloudinary, imgUrl);
+        }
+
+        public IEnumerable<T> GetLast<T>(int count)
+        {
+            var announcements =
+                 this.announcementsRepository
+                     .All()
+                     .OrderByDescending(x => x.CreatedOn)
+                     .Take(count)
+                     .To<T>();
+
+            return announcements.ToList();
+        }
+
+        public IEnumerable<T> GetBySearchParams<T>(int? cityId, int? subCategoryId, string keywords)
+        {
+            ;
+            var queryModel =
+                this.announcementsRepository.All()
+                .Where(x => cityId != null ? x.CityId == cityId : true &&
+                subCategoryId != null ? x.SubCategoryId == subCategoryId : true);
+
+            if (keywords != null)
+            {
+                string[] keywordsArr = keywords.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var keyword in keywordsArr)
+                {
+                    queryModel = queryModel.Where(x =>
+                    x.Description.ToLower().Contains(keyword.ToLower())
+                    || x.Title.ToLower().Contains(keyword.ToLower())
+                    || x.Tags.Select(x => x.Tag.Name).Contains(keyword));
+                }
+            }
+
+            return queryModel.To<T>().ToList();
         }
 
         private async Task GetOrCreateTags(AnnouncementInputModel announcementInputModel, Announcement announcement)

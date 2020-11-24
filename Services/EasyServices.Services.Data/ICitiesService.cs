@@ -8,6 +8,6 @@
     {
         IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePairs();
 
-        City GetCityById(int cityId);
+        City GetCityById(int? cityId);
     }
 }

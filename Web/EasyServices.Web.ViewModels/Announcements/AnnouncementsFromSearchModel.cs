@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EasyServices.Web.ViewModels.Announcements
+﻿namespace EasyServices.Web.ViewModels.Announcements
 {
-    class AnnouncementsFromSearchModel
+    using AspNetCoreTemplate.Web.ViewModels;
+    using System.Collections.Generic;
+
+    public class AnnouncementsFromSearchModel : PaggingViewModel
     {
+        public string CityName { get; set; }
+
+        public string SubCategoryName { get; set; }
+
+        public string Keywords { get; set; }
+
+        public IEnumerable<AnnouncementViewModel> Announcements { get; set; }
     }
 }

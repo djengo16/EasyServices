@@ -26,7 +26,7 @@
                 }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 
-        public City GetCityById(int cityId)
+        public City GetCityById(int? cityId)
         {
             return this.citiesRepository.All()
                 .FirstOrDefault(x => x.Id == cityId);
