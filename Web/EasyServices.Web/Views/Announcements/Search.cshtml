@@ -1,0 +1,30 @@
+﻿@model EasyServices.Web.ViewModels.Announcements.AnnouncementsFromSearchModel
+<h3 class="bg-secondary"><i>Резултат от търсенето</i></h3>
+
+@if (Model.CityName != null)
+{
+    <i>Населено място: @Model.CityName /</i>
+}
+@if (Model.SubCategoryName != null)
+{
+    <i>Подкатегория: @Model.SubCategoryName /</i>
+}   @if (Model.Keywords != null)
+{
+    <i>Ключови думи: @Model.Keywords</i>
+}
+
+@if (Model.Announcements.Count() == 0)
+{
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Няма намерени обяви!</h4>
+    </div>
+}
+
+
+<div class="row row-cols-1 row-cols-md-3">
+    @foreach (var currentAnnouncement in Model.Announcements)
+    {
+        <partial name="_Announcement" model="@currentAnnouncement" />
+    }
+</div>
