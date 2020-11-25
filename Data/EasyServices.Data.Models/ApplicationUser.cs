@@ -18,6 +18,7 @@ namespace EasyServices.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.Announcements = new HashSet<Announcement>();
             this.Reviews = new HashSet<Review>();
+            this.Notifications = new HashSet<Notification>();
         }
 
         // Personal Info
@@ -48,6 +49,8 @@ namespace EasyServices.Data.Models
         public virtual ICollection<Announcement> Announcements { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
+
+        public virtual ICollection<Notification> Notifications { get; set; }
 
     }
 }
