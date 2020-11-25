@@ -15,16 +15,23 @@
     <div class="row">
         <div class="col-12 col-md-6">
             <h1 style="text-transform; " class="is-bold">@Model.Title</h1>
-            <p><a href="/SubCategories/ById/@Model.SubCategoryId">@Model.SubCategoryName</a></p>
+            <p><a asp-controller="SubCategories"
+                  asp-action="ById"
+                  asp-route-id="@Model.SubCategoryId">
+                @Model.SubCategoryName</a></p>
             <div class="is-account-box mt-4">
                 <div class="row">
                     <div class="col-3 col-md-3">
-                        <img class="user-avatar-big w-100 rounded" src="@Model.User.ProfilePicture" style="" alt="">
+                        <img class="user-avatar-big w-100 rounded" 
+                             src="@Model.User.ProfilePicture" style="" alt="">
                     </div>
                     <div class="col-9 col-md-6">
                         <div class="profile">
                             <div class="profile-name">
-                                <a asp-controller="Users" asp-action="Profile" asp-route-id="@Model.User.Id">@Model.User.Name</a>
+                                <a asp-controller="Users" 
+                                   asp-action="Profile"
+                                   asp-route-id="@Model.User.Id">
+                                @(Model.User.Name == null ? Model.User.Email : Model.User.Name ) </a>
                             </div>
                         </div>
                     </div>
@@ -32,7 +39,8 @@
                     <div class="col-12 col-md-3">
                         <div class="rating d-flex w-100">
                             <img class="w-25" src="@GlobalConstants.AnnouncementStarImg" alt="">
-                            <div style="font-size: 30px;line-height: 30px;font-weight: 700;margin-left: 5px;float: left;color: #000">@Model.TotalRating</div>
+                            <div style="font-size: 30px;line-height: 30px;font-weight:
+                                 700;margin-left: 5px;float: left;color: #000">@Model.TotalRating</div>
                         </div>
 
                         @if (Model.ReviewsCount == 1)
@@ -78,7 +86,9 @@
                         </button>
                         @if (User.IsInRole("Administrator") || Model.User.Id == userId)
                         {
-                            <a asp-controller="Announcements" asp-action="Edit" asp-route-id="@Model.Id" class="btn-sm btn-info">Редактирай обявата</a>
+                            <a asp-controller="Announcements" 
+                               asp-action="Edit" 
+                               asp-route-id="@Model.Id" class="btn-sm btn-info">Редактирай обявата</a>
                         }
                         <!-- The Modal -->
                         <div class="modal" id="myModal">

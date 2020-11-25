@@ -81,6 +81,7 @@
             services.AddTransient<ICitiesService, CitiesService>();
             services.AddTransient<IReviewsService, ReviewsService>();
             services.AddTransient<ITagsService, TagsService>();
+            services.AddTransient<INotificationsService, NotificationsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

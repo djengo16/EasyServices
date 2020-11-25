@@ -1,0 +1,51 @@
+﻿@model EasyServices.Web.ViewModels.Notifications.AllNotificationsViewModel
+    <h1>Известия</h1>
+@if (Model.Notifications.Any())
+{
+
+<div class="">
+    @foreach (var notification in Model.Notifications)
+    {
+        <div class="toast show">
+            <div class="mt-2" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="mr-auto">
+                        @if (notification.IsSeen == false)
+                        {
+                            <span class="badge badge-primary cc_cursor">Ново известие</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-light">Видяно</span>
+                        }
+                    </strong>
+                    <small>@notification.NotificationTime</small>
+                    <form asp-controller="Notifications" asp-action="Delete" method="post">
+                        <input type="number" name="id" value="@notification.Id" hidden />
+                        <button type="submit" class="ml-2 mb-1 close" title="Delete">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </form>
+            </div>
+                <div class="toast-body">
+                    @*<img src="@notification.SenderUserProfilePicture"
+                         width="40" class="rounded-circle">*@
+
+                    @notification.Content
+                <br />
+                    <a class="justify-content-center"
+                       asp-controller="Notifications"
+                       asp-action="See"
+                       asp-route-id="@notification.Id"
+                       asp-route-url="@notification.Destination">към обявата</a>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+    }
+    else
+    {
+    <h2>Няма нови известия!</h2>
+    }

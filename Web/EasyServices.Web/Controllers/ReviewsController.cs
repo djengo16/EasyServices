@@ -14,19 +14,27 @@
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IReviewsService reviewsService;
+        private readonly IAnnouncementsService announcementsService;
 
-        public ReviewsController(UserManager<ApplicationUser> userManager, IReviewsService reviewsService)
+        public ReviewsController(
+            UserManager<ApplicationUser> userManager,
+            IReviewsService reviewsService, 
+            IAnnouncementsService announcementsService)
         {
             this.userManager = userManager;
             this.reviewsService = reviewsService;
+            this.announcementsService = announcementsService;
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(ReviewInputModel review)
         {
-            string userId = this.userManager.GetUserId(this.HttpContext.User);
+            var user = await this.userManager.GetUserAsync(this.User);
 
-            await this.reviewsService.CreateAsync(review, userId);
+            review.User = user;
+            review.Announcement = this.announcementsService.GetById(review.AnnouncementId);
+
+            await this.reviewsService.CreateAsync(review);
 
             return this.RedirectToAction("Details", "Announcements", new { id = review.AnnouncementId });
         }

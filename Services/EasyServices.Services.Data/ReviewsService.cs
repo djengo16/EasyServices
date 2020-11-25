@@ -10,14 +10,18 @@
     public class ReviewsService : IReviewsService
     {
         private readonly IDeletableEntityRepository<Review> reviewsRepository;
+        private readonly INotificationsService notificationsService;
 
-        public ReviewsService(IDeletableEntityRepository<Review> reviewsRepository)
+        public ReviewsService(IDeletableEntityRepository<Review> reviewsRepository, INotificationsService notificationsService)
         {
             this.reviewsRepository = reviewsRepository;
+            this.notificationsService = notificationsService;
         }
 
-        public async Task CreateAsync(ReviewInputModel review, string userId)
+        public async Task CreateAsync(ReviewInputModel review)
         {
+            var userId = review.User.Id;
+
             var existingReview = this.reviewsRepository.All()
                 .FirstOrDefault(x => x.AnnouncementId == review.AnnouncementId && x.UserId == userId);
 
@@ -25,11 +29,13 @@
             {
                 var newReview = new Review
                 {
-                    AnnouncementId = review.AnnouncementId,
+                    Announcement = review.Announcement,
                     Comment = review.Comment,
                     Rating = review.Rate,
-                    UserId = userId,
+                    User = review.User,
                 };
+
+                await this.notificationsService.AddNotificationFromReviewAsync(newReview);
 
                 await this.reviewsRepository.AddAsync(newReview);
             }
