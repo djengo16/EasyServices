@@ -32,7 +32,7 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             review.User = user;
-            review.Announcement = this.announcementsService.GetById(review.AnnouncementId);
+            review.Announcement = await this.announcementsService.GetByIdAsync(review.AnnouncementId);
 
             await this.reviewsService.CreateAsync(review);
 

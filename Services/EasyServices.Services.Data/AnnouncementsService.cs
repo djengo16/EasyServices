@@ -43,7 +43,6 @@
 
         public async Task<string> CreateAsync(AnnouncementInputModel announcementInputModel)
         {
-
             var announcement = new Announcement
             {
                 SubCategoryId = announcementInputModel.SubCategoryId,
@@ -57,7 +56,7 @@
 
             await this.AddImagesToAnnouncement(announcementInputModel, announcement);
 
-            await this.GetOrCreateTags(announcementInputModel, announcement);
+            await this.GetOrCreateTagsAsync(announcementInputModel, announcement);
 
             await this.announcementsRepository.AddAsync(announcement);
             await this.announcementsRepository.SaveChangesAsync();
@@ -78,9 +77,8 @@
             await this.announcementsRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAllBySubCategoryId<T>(int subCategoryId, int? take = null, int skip = 0)
+        public async Task<IEnumerable<T>> GetAllBySubCategoryIdAsync<T>(int subCategoryId, int? take = null, int skip = 0)
         {
-
             var query = this.announcementsRepository
                 .All()
                 .OrderBy(x => x.Reviews.Count)
@@ -92,27 +90,27 @@
                 query = query.Take(take.Value);
             }
 
-            return query.To<T>().ToList();
+            return await query.To<T>().ToListAsync();
         }
 
-        public int GetCountBySubCategoryId(int subCategoryId)
+        public async Task<int> GetCountBySubCategoryIdAsync(int subCategoryId)
         {
-            return this.announcementsRepository.All().Count(x => x.SubCategoryId == subCategoryId);
+            return await this.announcementsRepository.All().CountAsync(x => x.SubCategoryId == subCategoryId);
         }
 
-        public Announcement GetById(string id)
+        public async Task<Announcement> GetByIdAsync(string id)
         {
-            return this.announcementsRepository.All().FirstOrDefault(x => x.Id == id);
+            return await this.announcementsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public T GetDetails<T>(string id)
+        public async Task<T> GetDetailsAsync<T>(string id)
         {
             var announcement =
-                 this.announcementsRepository
+                 await this.announcementsRepository
                      .All()
                      .Where(x => x.Id == id)
                      .To<T>()
-                     .FirstOrDefault();
+                     .FirstOrDefaultAsync();
 
             return announcement;
         }
@@ -133,7 +131,7 @@
             this.context.AnnouncementTags
                 .RemoveRange(this.context.AnnouncementTags.Where(x => x.AnnouncementId == announcement.Id).ToList());
 
-            await this.GetOrCreateTags(announcementInputModel, announcement);
+            await this.GetOrCreateTagsAsync(announcementInputModel, announcement);
 
             await this.announcementsRepository.SaveChangesAsync();
 
@@ -143,7 +141,7 @@
         public async Task DeleteAnnouncementPhoto(string imgUrl, string announcementId)
         {
             var announcement = await this.announcementsRepository.GetByIdWithDeletedAsync(announcementId);
-            var imageToRemove = this.imagesRepository.All().FirstOrDefault(x => x.Url == imgUrl);
+            var imageToRemove = await this.imagesRepository.All().FirstOrDefaultAsync(x => x.Url == imgUrl);
 
             this.imagesRepository.Delete(imageToRemove);
             await this.imagesRepository.SaveChangesAsync();
@@ -151,7 +149,7 @@
             await CloudinaryHelper.RemoveFileAsync(this.cloudinary, imgUrl);
         }
 
-        public IEnumerable<T> GetLast<T>(int count)
+        public async Task<IEnumerable<T>> GetLastAsync<T>(int count)
         {
             var announcements =
                  this.announcementsRepository
@@ -160,12 +158,11 @@
                      .Take(count)
                      .To<T>();
 
-            return announcements.ToList();
+            return await announcements.ToListAsync();
         }
 
         public IEnumerable<T> GetBySearchParams<T>(int? cityId, int? subCategoryId, string keywords)
         {
-            ;
             var queryModel =
                 this.announcementsRepository.All()
                 .Where(x => cityId != null ? x.CityId == cityId : true &&
@@ -187,7 +184,7 @@
             return queryModel.To<T>().ToList();
         }
 
-        private async Task GetOrCreateTags(AnnouncementInputModel announcementInputModel, Announcement announcement)
+        private async Task GetOrCreateTagsAsync(AnnouncementInputModel announcementInputModel, Announcement announcement)
         {
             foreach (var tag in announcementInputModel.Tags)
             {

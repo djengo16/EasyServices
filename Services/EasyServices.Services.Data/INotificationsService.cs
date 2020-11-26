@@ -16,7 +16,7 @@
 
         Task SeeNotificationAsync(int norificationId);
 
-        Task<IEnumerable<T>> GetAllByUserId<T>(string userId);
+        Task<IEnumerable<T>> GetAllByUserIdAsync<T>(string userId);
 
         string GetNotificationTime(DateTime createdOn);
     }

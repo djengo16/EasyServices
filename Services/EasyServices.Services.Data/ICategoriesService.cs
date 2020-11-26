@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using EasyServices.Data.Models;
     using EasyServices.Web.ViewModels.Administration.Categories;
 
@@ -9,9 +10,9 @@
     {
         IEnumerable<T> GetAll<T>();
 
-        Task AddCategory(AddCategoryInputModel inputModel);
+        Task AddCategoryAsync(AddCategoryInputModel inputModel);
 
-        Task EditCategory(EditCategoryModel inputModel);
+        Task EditCategoryAsync(EditCategoryModel inputModel);
 
         Task DeleteCategory(int categoryId);
 
@@ -21,6 +22,6 @@
 
         Category GetById(int id);
 
-        ICollection<T> GetCategoriesAndSubCategories<T>();
+        Task<ICollection<T>> GetCategoriesAndSubCategoriesAsync<T>();
     }
 }

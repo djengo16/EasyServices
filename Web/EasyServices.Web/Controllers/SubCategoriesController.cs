@@ -1,6 +1,7 @@
 ﻿namespace EasyServices.Web.Controllers
 {
     using System;
+    using System.Threading.Tasks;
 
     using EasyServices.Services.Data;
     using EasyServices.Web.ViewModels.Announcements;
@@ -22,14 +23,14 @@
             this.subCategoriesService = subCategoriesService;
         }
 
-        public IActionResult ById(int id, int page = 1)
+        public async Task<IActionResult> ById(int id, int page = 1)
         {
             var model = this.subCategoriesService.GetById<SubCategoryViewModel>(id);
 
-            model.Announcements = this.announcementsService
-                .GetAllBySubCategoryId<AnnouncementViewModel>(id, AnnouncementsPerPage, (page - 1) * AnnouncementsPerPage);
+            model.Announcements = await this.announcementsService
+                .GetAllBySubCategoryIdAsync<AnnouncementViewModel>(id, AnnouncementsPerPage, (page - 1) * AnnouncementsPerPage);
 
-            int count = this.announcementsService.GetCountBySubCategoryId(id);
+            int count = await this.announcementsService.GetCountBySubCategoryIdAsync(id);
 
             model.PagesCount = (int)Math.Ceiling((double)count / AnnouncementsPerPage);
 

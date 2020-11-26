@@ -8,25 +8,25 @@
 
     public interface IAnnouncementsService
     {
-        IEnumerable<T> GetAllBySubCategoryId<T>(int subCategoryId, int? take = null, int skip = 0);
+        Task<IEnumerable<T>> GetAllBySubCategoryIdAsync<T>(int subCategoryId, int? take = null, int skip = 0);
 
         Task DeleteAsync(string id);
 
-        T GetDetails<T>(string id);
+        Task<T> GetDetailsAsync<T>(string id);
 
         Task<string> CreateAsync(AnnouncementInputModel announcementInputModel);
 
-        int GetCountBySubCategoryId(int subCategoryId);
+        Task<int> GetCountBySubCategoryIdAsync(int subCategoryId);
 
         Task DeleteAnnouncementPhoto(string imgUrl, string announcementId);
 
         Task<string> UpdateAsync(UpdateAnnouncementViewModel announcementInputModel, string id);
 
-        IEnumerable<T> GetLast<T>(int count);
+        Task<IEnumerable<T>> GetLastAsync<T>(int count);
 
         IEnumerable<T> GetBySearchParams<T>(int? cityId, int? subCategoryId, string keywords);
 
-        Announcement GetById(string id);
+        Task<Announcement> GetByIdAsync(string id);
 
     }
 }

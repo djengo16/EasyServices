@@ -62,13 +62,13 @@
             await this.notificationsRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAllByUserId<T>(string userId)
+        public async Task<IEnumerable<T>> GetAllByUserIdAsync<T>(string userId)
         {
             var query = this.notificationsRepository.All()
                 .Where(x => x.UserId == userId)
                 .OrderByDescending(x => x.CreatedOn);
 
-            return query.To<T>().ToList();
+            return await query.To<T>().ToListAsync();
         }
 
         public string GetNotificationTime(DateTime createdOn)

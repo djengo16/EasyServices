@@ -16,11 +16,11 @@
             this.notificationsService = notificationsService;
         }
 
-        public IActionResult All(string userId)
+        public async Task<IActionResult> All(string userId)
         {
             var viewModel = new AllNotificationsViewModel
             {
-                Notifications = this.notificationsService.GetAllByUserId<NotificationViewModel>(userId),
+                Notifications = await this.notificationsService.GetAllByUserIdAsync<NotificationViewModel>(userId),
             };
 
             foreach (var notification in viewModel.Notifications)

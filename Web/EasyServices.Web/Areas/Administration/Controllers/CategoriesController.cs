@@ -28,7 +28,7 @@
                 return this.Redirect("/Administration/Dashboard");
             }
 
-            await this.categoriesService.AddCategory(inputModel);
+            await this.categoriesService.AddCategoryAsync(inputModel);
 
             return this.Redirect("/Administration/Dashboard");
         }
@@ -40,7 +40,7 @@
                 return this.Redirect("/Administration/Dashboard");
             }
 
-            await this.categoriesService.EditCategory(editModel);
+            await this.categoriesService.EditCategoryAsync(editModel);
 
             return this.Redirect("/Administration/Dashboard");
         }

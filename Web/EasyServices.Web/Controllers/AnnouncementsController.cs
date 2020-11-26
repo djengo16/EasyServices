@@ -36,11 +36,11 @@
         }
 
         [Authorize]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var viewModel = new AnnouncementInputModel();
             viewModel.CitiesItems = this.citiesService.GetAllAsKeyValuePairs();
-            viewModel.Categories = this.categoriesService.GetCategoriesAndSubCategories<AnnouncementCategoryInputModel>();
+            viewModel.Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>();
             viewModel.TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>();
             return this.View(viewModel);
         }
@@ -54,7 +54,7 @@
             {
                 inputModel.TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>();
                 inputModel.CitiesItems = this.citiesService.GetAllAsKeyValuePairs();
-                inputModel.Categories = this.categoriesService.GetCategoriesAndSubCategories<AnnouncementCategoryInputModel>();
+                inputModel.Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>();
 
                 return this.View(inputModel);
             }
@@ -66,10 +66,10 @@
             return this.Redirect($"/Announcements/Details/{announcementId}");
         }
 
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
-            var announcementDatailsModel = this.announcementsService
-                .GetDetails<AnnouncementDetailsViewModel>(id);
+            var announcementDatailsModel = await this.announcementsService
+                .GetDetailsAsync<AnnouncementDetailsViewModel>(id);
 
             return this.View(announcementDatailsModel);
         }
@@ -84,10 +84,10 @@
         }
 
         [Authorize]
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
             var currentLoggedUser = this.userManager.GetUserId(this.HttpContext.User);
-            var announcement = this.announcementsService.GetById(id);
+            var announcement = await this.announcementsService.GetByIdAsync(id);
 
             var viewModel = new UpdateAnnouncementViewModel
             {
@@ -98,7 +98,7 @@
                 SubCategoryId = announcement.SubCategoryId,
                 CityId = announcement.CityId,
                 CitiesItems = this.citiesService.GetAllAsKeyValuePairs(),
-                Categories = this.categoriesService.GetCategoriesAndSubCategories<AnnouncementCategoryInputModel>(),
+                Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>(),
                 TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>(),
             };
 
@@ -114,7 +114,7 @@
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateAnnouncementViewModel inputModel, string id)
         {
-            var announcement = this.announcementsService.GetById(id);
+            var announcement = await this.announcementsService.GetByIdAsync(id);
             var currentLoggedUser = this.userManager.GetUserId(this.HttpContext.User);
 
             if (currentLoggedUser != announcement.UserId)
@@ -137,7 +137,7 @@
 
                 currentInput.TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>();
                 currentInput.CitiesItems = this.citiesService.GetAllAsKeyValuePairs();
-                currentInput.Categories = this.categoriesService.GetCategoriesAndSubCategories<AnnouncementCategoryInputModel>();
+                currentInput.Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>();
 
                 return this.View(currentInput);
             }

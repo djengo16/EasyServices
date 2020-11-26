@@ -8,6 +8,7 @@
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
     using EasyServices.Web.ViewModels.Administration.Categories;
+    using Microsoft.EntityFrameworkCore;
 
     public class CategoriesService : ICategoriesService
     {
@@ -37,17 +38,17 @@
             return this.categoriesRepository.All().FirstOrDefault(x => x.Id == id)?.Name;
         }
 
-        public ICollection<T> GetCategoriesAndSubCategories<T>()
+        public async Task<ICollection<T>> GetCategoriesAndSubCategoriesAsync<T>()
         {
 
             IQueryable<Category> query =
                 this.categoriesRepository.AllAsNoTracking().OrderBy(x => x.Name);
 
-            return query.To<T>()
-                .ToList();
+            return await query.To<T>()
+                .ToListAsync();
         }
 
-        public async Task AddCategory(AddCategoryInputModel inputModel)
+        public async Task AddCategoryAsync(AddCategoryInputModel inputModel)
         {
             await this.categoriesRepository.AddAsync(new Category
             {
@@ -58,7 +59,7 @@
             await this.categoriesRepository.SaveChangesAsync();
         }
 
-        public async Task EditCategory(EditCategoryModel inputModel)
+        public async Task EditCategoryAsync(EditCategoryModel inputModel)
         {
             var category = this.GetById(inputModel.Id);
 
