@@ -74,6 +74,7 @@
             return this.View(announcementDatailsModel);
         }
 
+        [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
             var currentUrl = this.HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Referer").Value;
@@ -102,9 +103,9 @@
                 TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>(),
             };
 
-            if (currentLoggedUser != viewModel.UserId)
+            if (currentLoggedUser != announcement.UserId && !this.User.IsInRole("Administrator"))
             {
-                return this.RedirectToAction("/Home/Index");
+                return this.Redirect(this.HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Referer").Value;);
             }
 
             return this.View(viewModel);
@@ -117,9 +118,9 @@
             var announcement = await this.announcementsService.GetByIdAsync(id);
             var currentLoggedUser = this.userManager.GetUserId(this.HttpContext.User);
 
-            if (currentLoggedUser != announcement.UserId)
+            if (currentLoggedUser != announcement.UserId && !this.User.IsInRole("Administrator"))
             {
-                return this.RedirectToAction("/Home/Index");
+                return this.Redirect(this.HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Referer").Value);
             }
 
             if (!this.ModelState.IsValid)

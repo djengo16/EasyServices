@@ -5,8 +5,12 @@
 
 <h1>@this.ViewData["Title"]</h1>
 <h5>Категори</h5>
-
-
+<hr />
+<div class="row">
+    <h6 class="col-md-3">Име</h6>
+    <h6 class="col-md-6">Снимка на категорията</h6>
+</div>
+<hr />
 @foreach (var category in Model.Categories)
 {
     <form>
@@ -29,8 +33,6 @@
                      style="width: 50%;"
                      class="rounded" alt="...">
             </div>
-
-            @*<input type="hidden" name="id" value="6" />*@
             <button asp-controller="Categories"
                     asp-action="Edit"
                     asp-route-id="@category.Id"

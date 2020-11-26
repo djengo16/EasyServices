@@ -1,0 +1,56 @@
+﻿@using EasyServices.Web.ViewModels.Users
+@model UserProfileViewModel
+
+<div class="container">
+    <div class="text-center"><h3>Профил на @(Model.Name == null ? Model.Email : Model.Name)</h3></div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.ProfilePicture" class="mx-auto img-fluid img-circle d-block" alt="...">
+        </div>
+
+
+
+        <div class="col-md-4">
+            <div class="">
+                <h5>Информация</h5>
+                <p>Уебсайт: <a href="@Model.WebSite">@Model.WebSite</a></p>
+                <p>Имейл: <a>@Model.Email<a /></p>
+                <p>Брой обяви: <a>@Model.Announcements.Count</a></p>
+                <p>Телефон: <a>@Model.PhoneNumber</a></p>
+                <p style="word-wrap: break-word; font-family:'Times New Roman'">За мен: <br /> @Model.DescriptionInfo</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<hr />
+<h4 class="justify-content-center">Обяви</h4>
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3">
+        @foreach (var currentAnnouncement in Model.Announcements)
+        {
+            <partial name="_Announcement" model="@currentAnnouncement" />
+        }
+    </div>
+</div>
+
+
+@*@section Scripts{
+    <script>
+    $(document).ready(function () {
+            $(".moreBox").slice(0, 3).show();
+            if ($(".blogBox:hidden").length != 0) {
+                $("#loadMore").show();
+            }
+            $("#loadMore").on('click', function (e) {
+                e.preventDefault();
+                $(".moreBox:hidden").slice(0, 6).slideDown();
+                if ($(".moreBox:hidden").length == 0) {
+                    $("#loadMore").fadeOut('slow');
+                }
+            });
+        });</script>
+}*@
