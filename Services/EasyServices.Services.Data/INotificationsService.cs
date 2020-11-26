@@ -10,13 +10,13 @@
     {
         Task AddNotificationFromReviewAsync(Review review);
 
-        int GetUnreadUserNotificationsCount(string userId);
+        Task<int> GetUnreadUserNotificationsCount(string userId);
 
         Task DeleteAsync(int notificationId);
 
         Task SeeNotificationAsync(int norificationId);
 
-        IEnumerable<T> GetAllByUserId<T>(string userId);
+        Task<IEnumerable<T>> GetAllByUserId<T>(string userId);
 
         string GetNotificationTime(DateTime createdOn);
     }

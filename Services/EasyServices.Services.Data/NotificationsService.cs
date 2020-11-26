@@ -24,7 +24,7 @@
         public async Task AddNotificationFromReviewAsync(Review review)
         {
             string reviewUser = review.User.Name != null ? review.User.Name : review.User.Email;
-            ;
+
             var newNotification = new Notification
             {
                 UserId = review.Announcement.UserId,
@@ -45,11 +45,11 @@
             await this.notificationsRepository.SaveChangesAsync();
         }
 
-        public int GetUnreadUserNotificationsCount(string userId)
+        public async Task<int> GetUnreadUserNotificationsCount(string userId)
         {
-            return this.notificationsRepository.All()
+            return await this.notificationsRepository.All()
                 .Where(x => x.UserId == userId && x.IsSeen == false)
-                .Count();
+                .CountAsync();
         }
 
         public async Task SeeNotificationAsync(int norificationId)
