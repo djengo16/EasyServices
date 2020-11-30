@@ -1,6 +1,7 @@
 ﻿namespace EasyServices.Web
 {
     using System.Reflection;
+
     using CloudinaryDotNet;
     using EasyServices.Data;
     using EasyServices.Data.Common;
@@ -53,7 +54,7 @@
                         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
-
+            services.AddServerSideBlazor();
             services.AddSingleton(this.configuration);
 
             // Cloudinary account reg
@@ -124,6 +125,7 @@
                         endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();
+                        endpoints.MapBlazorHub();
                     });
         }
     }

@@ -105,7 +105,7 @@
 
             if (currentLoggedUser != announcement.UserId && !this.User.IsInRole("Administrator"))
             {
-                return this.Redirect(this.HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Referer").Value;);
+                return this.Redirect(this.HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Referer").Value);
             }
 
             return this.View(viewModel);

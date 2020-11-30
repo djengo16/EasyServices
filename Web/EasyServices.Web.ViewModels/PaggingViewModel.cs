@@ -1,7 +1,5 @@
 ﻿namespace AspNetCoreTemplate.Web.ViewModels
 {
-    using System;
-
     public class PaggingViewModel
     {
         public int PagesCount { get; set; }
