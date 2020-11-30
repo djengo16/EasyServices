@@ -1,4 +1,5 @@
 ﻿@using EasyServices.Common
+@using EasyServices.Web.Pages
 @model EasyServices.Web.ViewModels.Home.IndexViewModel
 @{
     this.ViewData["Title"] = "Home Page";
@@ -74,8 +75,11 @@
             </form>
         </div>
         <div id="menu2" class="tab-pane fade">
-            <h3>Menu 2</h3>
-            <p>Some content in menu 2.</p>
+            <br />
+            <h3 class="text-center">Намерете потребител</h3>
+
+            @(await Html.RenderComponentAsync<SearchUser>(RenderMode.ServerPrerendered))
+
         </div>
     </div>
     <br />

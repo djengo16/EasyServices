@@ -1,0 +1,44 @@
+﻿@page "/searchuser"
+@using EasyServices.Web.ViewModels.Users
+@inject EasyServices.Services.Data.IUsersService usersService
+
+<div class="row justify-content-center">
+    <div class="input-group justify-content-center col-5">
+        <input @bind="searchInput" type="text" class="form-control">
+        <div class="input-group-append">
+            <button @onclick="Search" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+</div>
+
+@if (users != null)
+{
+    <h4>Резултат</h4>
+    <tr />
+    <ul class="list-unstyled col-6">
+
+        @foreach (var user in users)
+        {
+        <li class="media">
+            <img src="@user.ProfilePicture" width="50" alt="...">
+            <div class="media-body">
+                <h5  class="m-2"><a href="/Users/Profile/@user.Id">@user.Email</a></h5>
+                <p class="m-1 small">@user.Name</p>
+            </div>
+        </li>
+        <hr />
+        }
+    </ul>
+}
+
+@code {
+
+    private IEnumerable<SearchedUserViewModel> users;
+    private string searchInput;
+
+    public void Search()
+    {
+        users = usersService.GetBySearch<SearchedUserViewModel>(searchInput);
+    }
+}
+

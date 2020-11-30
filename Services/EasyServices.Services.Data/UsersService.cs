@@ -1,5 +1,6 @@
 ﻿namespace EasyServices.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using EasyServices.Data.Common.Repositories;
@@ -13,6 +14,21 @@
         public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository)
         {
             this.usersRepository = usersRepository;
+        }
+
+        public IEnumerable<T> GetBySearch<T>(string searchKeywords)
+        {
+            if (string.IsNullOrWhiteSpace(searchKeywords))
+            {
+                return null;
+            }
+
+            var returnModel = this.usersRepository
+                .AllAsNoTracking()
+                .Where(x => x.Email.Contains(searchKeywords) || x.Name.Contains(searchKeywords));
+
+            return returnModel.To<T>().ToList();
+
         }
 
         public T GetUserById<T>(string userId)
