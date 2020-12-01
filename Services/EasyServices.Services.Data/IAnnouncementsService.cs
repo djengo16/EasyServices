@@ -29,5 +29,7 @@
         Task<Announcement> GetByIdAsync(string id);
 
         int GetCountFromSearched(int? cityId, int? subCategoryId, string keywords);
+
+        int GetCount();
     }
 }

@@ -12,7 +12,42 @@
     <p class="lead">Сподели <a class="active" href="/Categories/All">услуга</a> или намери такава.</p>
 </div>
 
+<div class="container">
+    <div class="row">
 
+        <br />
+        <br />
+        <br />
+
+    </div>
+    <div class="row text-center">
+        <div class="col">
+            <div class="counter">
+                <i class="fas fa-users fa-2x"></i>
+                <h2 class="timer count-title count-number" data-to="@Model.UsersCount" data-speed="1500"></h2>
+                <p class="count-text ">Потребители</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="counter">
+                <i class="fas fa-scroll fa-2x"></i>
+                <h2 class="timer count-title count-number" data-to="@Model.AnnouncementsCount" data-speed="1500"></h2>
+                <p class="count-text ">Обяви</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="counter">
+                <i class="fa fa-lightbulb-o fa-2x"></i>
+                <h2 class="timer count-title count-number" data-to="@Model.SubCategoriesCount" data-speed="1500"></h2>
+                <p class="count-text ">Подкатегории</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+<br />
+<br />
 
 <!-- Nav tabs -->
 <section class="bg-light">
@@ -47,7 +82,7 @@
                 <div class="form-row">
                     <input name="keywords" placeholder="Ключови думи" class="form-control mx-4 col-3" />
                     <select name="subcategoryId" title="Категория" class="form-control col-3">
-                        <option>Категория</option>
+                        <option name="subcategoryId" value="">Категория</option>
                         @foreach (var category in Model.Categories)
                         {
 
@@ -63,7 +98,7 @@
                     <select name="cityId" title="Изберете град"
                             asp-items="cityItems"
                             class="form-control mx-4 col-3">
-                        <option>Град</option>
+                        <option name="cityId" value="">Град</option>
                     </select>
                     <button type="submit"
                             class="btn btn-primary"
@@ -86,9 +121,9 @@
     <hr />
     <!-- Tab panes -->
     <div class="tab-content">
-        <div class="tab-pane container active" id="home">...</div>
-        <div class="tab-pane container fade" id="menu1">...</div>
-        <div class="tab-pane container fade" id="menu2">...</div>
+        <div class="tab-pane container active" id="home"></div>
+        <div class="tab-pane container fade" id="menu1"></div>
+        <div class="tab-pane container fade" id="menu2"></div>
     </div>
 </section>
 

@@ -13,12 +13,13 @@
 
 @if (users != null)
 {
-    <h4>Резултат</h4>
+    <h6>Резултат</h6>
     <tr />
     <ul class="list-unstyled col-6">
 
         @foreach (var user in users)
         {
+          <hr />
         <li class="media">
             <img src="@user.ProfilePicture" width="50" alt="...">
             <div class="media-body">
@@ -26,7 +27,7 @@
                 <p class="m-1 small">@user.Name</p>
             </div>
         </li>
-        <hr />
+
         }
     </ul>
 }

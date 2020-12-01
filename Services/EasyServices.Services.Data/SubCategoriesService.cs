@@ -96,5 +96,10 @@
             this.subCategoriesRepository.Delete(subCategory);
             await this.subCategoriesRepository.SaveChangesAsync();
         }
+
+        public int GetCount()
+        {
+            return this.subCategoriesRepository.All().Count();
+        }
     }
 }

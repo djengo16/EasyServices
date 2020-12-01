@@ -6,6 +6,12 @@
 
     public class IndexViewModel
     {
+        public int UsersCount { get; set; }
+
+        public int SubCategoriesCount { get; set; }
+
+        public int AnnouncementsCount { get; set; }
+
         public IEnumerable<AnnouncementViewModel> Announcements { get; set; }
 
         public IEnumerable<AnnouncementCategoryInputModel> Categories { get; set; }

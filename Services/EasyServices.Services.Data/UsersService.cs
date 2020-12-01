@@ -31,6 +31,11 @@
 
         }
 
+        public int GetCount()
+        {
+            return this.usersRepository.All().Count();
+        }
+
         public T GetUserById<T>(string userId)
         {
             var userModel = this.usersRepository

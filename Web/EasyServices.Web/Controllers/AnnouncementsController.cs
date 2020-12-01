@@ -177,17 +177,6 @@
             return this.View(viewModel);
         }
 
-        // var model = this.subCategoriesService.GetById<SubCategoryViewModel>(id);
-
-        // model.Announcements = await this.announcementsService
-        //    .GetAllBySubCategoryIdAsync<AnnouncementViewModel>(id, AnnouncementsPerPage, (page - 1) * AnnouncementsPerPage);
-
-        // int count = await this.announcementsService.GetCountBySubCategoryIdAsync(id);
-
-        // model.PagesCount = (int) Math.Ceiling((double) count / AnnouncementsPerPage);
-
-        // model.CurrentPage = page;
-
         public async Task<IActionResult> DeleteAnnouncementPhoto(string announcementId, string imgUrl)
         {
             await this.announcementsService.DeleteAnnouncementPhoto(imgUrl, announcementId);

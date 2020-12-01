@@ -75,7 +75,7 @@
 
             this.announcementsRepository.Delete(announcement);
             await this.announcementsRepository.SaveChangesAsync();
-        } 
+        }
 
         public async Task<int> GetCountBySubCategoryIdAsync(int subCategoryId)
         {
@@ -184,6 +184,11 @@
             queryModel = take.HasValue ? queryModel.Skip(skip).Take(take.Value) : queryModel.Skip(skip);
 
             return queryModel.To<T>().ToList();
+        }
+
+        public int GetCount()
+        {
+            return this.announcementsRepository.All().Count();
         }
 
         public int GetCountFromSearched(int? cityId, int? subCategoryId, string keywords)

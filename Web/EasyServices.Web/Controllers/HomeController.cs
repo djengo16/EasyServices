@@ -15,18 +15,30 @@
         private readonly IAnnouncementsService announcementsService;
         private readonly ICitiesService citiesService;
         private readonly ICategoriesService categoriesService;
+        private readonly IUsersService usersService;
+        private readonly ISubCategoriesService subCategoriesService;
 
-        public HomeController(IAnnouncementsService announcementsService, ICitiesService citiesService, ICategoriesService categoriesService)
+        public HomeController(
+            IAnnouncementsService announcementsService,
+            ICitiesService citiesService,
+            ICategoriesService categoriesService,
+            IUsersService usersService,
+            ISubCategoriesService subCategoriesService)
         {
             this.announcementsService = announcementsService;
             this.citiesService = citiesService;
             this.categoriesService = categoriesService;
+            this.usersService = usersService;
+            this.subCategoriesService = subCategoriesService;
         }
 
         public async Task<IActionResult> Index()
         {
             IndexViewModel viewModel = new IndexViewModel
             {
+                UsersCount = this.usersService.GetCount(),
+                AnnouncementsCount = this.announcementsService.GetCount(),
+                SubCategoriesCount = this.subCategoriesService.GetCount(),
                 Announcements = await this.announcementsService.GetLastAsync<AnnouncementViewModel>(8),
                 CitiesItems = this.citiesService.GetAllAsKeyValuePairs(),
                 Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>(),
