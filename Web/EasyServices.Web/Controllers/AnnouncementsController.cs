@@ -1,5 +1,6 @@
 ﻿namespace EasyServices.Web.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -12,6 +13,8 @@
 
     public class AnnouncementsController : BaseController
     {
+        private const int AnnouncementsPerPage = 9;
+
         private readonly IAnnouncementsService announcementsService;
         private readonly ICitiesService citiesService;
         private readonly ICategoriesService categoriesService;
@@ -66,10 +69,10 @@
             return this.Redirect($"/Announcements/Details/{announcementId}");
         }
 
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
-            var announcementDatailsModel = await this.announcementsService
-                .GetDetailsAsync<AnnouncementDetailsViewModel>(id);
+            var announcementDatailsModel = this.announcementsService
+                .GetDetails<AnnouncementDetailsViewModel>(id);
 
             return this.View(announcementDatailsModel);
         }
@@ -150,20 +153,40 @@
             return this.Redirect($"/Announcements/Details/{announcementId}");
         }
 
-        public IActionResult Search(int? cityId, int? subCategoryId, string keywords)
+        public IActionResult Search(int? cityId, int? subCategoryId, string keywords, int page = 1)
         {
             var viewModel = new AnnouncementsFromSearchModel
             {
                 SubCategoryName = subCategoryId == null ? null : this.subCategoriesService.GetNameById(subCategoryId.GetValueOrDefault()),
+                SubCategoryId = subCategoryId,
+                CityId = cityId,
                 CityName = cityId == null ? null : this.citiesService.GetCityById(cityId).Name,
                 Keywords = keywords,
                 Announcements = this.announcementsService
-                .GetBySearchParams<AnnouncementViewModel>(cityId, subCategoryId, keywords)
+                .GetBySearchParams<AnnouncementViewModel>(
+                    cityId, subCategoryId, keywords, AnnouncementsPerPage, (page - 1) * AnnouncementsPerPage)
                 .OrderByDescending(x => x.CreatedOn),
             };
 
+            int count = this.announcementsService.GetCountFromSearched(cityId, subCategoryId, keywords);
+
+            viewModel.PagesCount = (int)Math.Ceiling((double)count / AnnouncementsPerPage);
+
+            viewModel.CurrentPage = page;
+
             return this.View(viewModel);
         }
+
+        // var model = this.subCategoriesService.GetById<SubCategoryViewModel>(id);
+
+        // model.Announcements = await this.announcementsService
+        //    .GetAllBySubCategoryIdAsync<AnnouncementViewModel>(id, AnnouncementsPerPage, (page - 1) * AnnouncementsPerPage);
+
+        // int count = await this.announcementsService.GetCountBySubCategoryIdAsync(id);
+
+        // model.PagesCount = (int) Math.Ceiling((double) count / AnnouncementsPerPage);
+
+        // model.CurrentPage = page;
 
         public async Task<IActionResult> DeleteAnnouncementPhoto(string announcementId, string imgUrl)
         {

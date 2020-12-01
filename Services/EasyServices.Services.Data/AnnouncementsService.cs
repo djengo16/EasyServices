@@ -75,23 +75,7 @@
 
             this.announcementsRepository.Delete(announcement);
             await this.announcementsRepository.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<T>> GetAllBySubCategoryIdAsync<T>(int subCategoryId, int? take = null, int skip = 0)
-        {
-            var query = this.announcementsRepository
-                .All()
-                .OrderBy(x => x.Reviews.Count)
-                .ThenByDescending(x => x.CreatedOn)
-                .Where(x => x.SubCategoryId == subCategoryId).Skip(skip);
-
-            if (take.HasValue)
-            {
-                query = query.Take(take.Value);
-            }
-
-            return await query.To<T>().ToListAsync();
-        }
+        } 
 
         public async Task<int> GetCountBySubCategoryIdAsync(int subCategoryId)
         {
@@ -103,14 +87,14 @@
             return await this.announcementsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<T> GetDetailsAsync<T>(string id)
+        public T GetDetails<T>(string id)
         {
             var announcement =
-                 await this.announcementsRepository
+                   this.announcementsRepository
                      .All()
                      .Where(x => x.Id == id)
                      .To<T>()
-                     .FirstOrDefaultAsync();
+                     .FirstOrDefault();
 
             return announcement;
         }
@@ -161,7 +145,23 @@
             return await announcements.ToListAsync();
         }
 
-        public IEnumerable<T> GetBySearchParams<T>(int? cityId, int? subCategoryId, string keywords)
+        public async Task<IEnumerable<T>> GetAllBySubCategoryIdAsync<T>(int subCategoryId, int? take = null, int skip = 0)
+        {
+            var query = this.announcementsRepository
+                .All()
+                .OrderBy(x => x.Reviews.Count)
+                .ThenByDescending(x => x.CreatedOn)
+                .Where(x => x.SubCategoryId == subCategoryId).Skip(skip);
+
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value);
+            }
+
+            return await query.To<T>().ToListAsync();
+        }
+
+        public IEnumerable<T> GetBySearchParams<T>(int? cityId, int? subCategoryId, string keywords, int? take = null, int skip = 0)
         {
             var queryModel =
                 this.announcementsRepository.All()
@@ -181,7 +181,32 @@
                 }
             }
 
+            queryModel = take.HasValue ? queryModel.Skip(skip).Take(take.Value) : queryModel.Skip(skip);
+
             return queryModel.To<T>().ToList();
+        }
+
+        public int GetCountFromSearched(int? cityId, int? subCategoryId, string keywords)
+        {
+            var queryModel =
+                this.announcementsRepository.All()
+                .Where(x => cityId != null ? x.CityId == cityId : true &&
+                subCategoryId != null ? x.SubCategoryId == subCategoryId : true);
+
+            if (keywords != null)
+            {
+                string[] keywordsArr = keywords.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var keyword in keywordsArr)
+                {
+                    queryModel = queryModel.Where(x =>
+                    x.Description.ToLower().Contains(keyword.ToLower())
+                    || x.Title.ToLower().Contains(keyword.ToLower())
+                    || x.Tags.Select(x => x.Tag.Name).Contains(keyword));
+                }
+            }
+
+            return queryModel.Count();
         }
 
         private async Task GetOrCreateTagsAsync(AnnouncementInputModel announcementInputModel, Announcement announcement)

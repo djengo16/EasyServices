@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using EasyServices.Data.Models;
 
+    using EasyServices.Data.Models;
     using EasyServices.Web.ViewModels.Announcements;
 
     public interface IAnnouncementsService
@@ -12,7 +12,7 @@
 
         Task DeleteAsync(string id);
 
-        Task<T> GetDetailsAsync<T>(string id);
+        T GetDetails<T>(string id);
 
         Task<string> CreateAsync(AnnouncementInputModel announcementInputModel);
 
@@ -24,9 +24,10 @@
 
         Task<IEnumerable<T>> GetLastAsync<T>(int count);
 
-        IEnumerable<T> GetBySearchParams<T>(int? cityId, int? subCategoryId, string keywords);
+        IEnumerable<T> GetBySearchParams<T>(int? cityId, int? subCategoryId, string keywords, int? take = null, int skip = 0);
 
         Task<Announcement> GetByIdAsync(string id);
 
+        int GetCountFromSearched(int? cityId, int? subCategoryId, string keywords);
     }
 }

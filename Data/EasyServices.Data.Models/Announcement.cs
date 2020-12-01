@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
 
     using EasyServices.Data.Common.Models;
 
@@ -48,8 +47,6 @@
         public virtual Category Category { get; set; }
 
         public int CategoryId { get; set; }
-
-        public double TotalRating => this.Reviews.Sum(x => x.Rating) / this.Reviews.Count;
 
         public virtual ICollection<AnnouncementTag> Tags { get; set; }
 
