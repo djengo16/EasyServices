@@ -6,7 +6,7 @@
 
         public const string TitleIsRequired = "Заглавието е задължително!";
 
-        public const string InvalidPriceMessage = "Въведената правилна цена!";
+        public const string InvalidPriceMessage = "Въведете правилна цена!";
 
         public const string CategoryRequirement = "Категорията е задължителна!";
     }

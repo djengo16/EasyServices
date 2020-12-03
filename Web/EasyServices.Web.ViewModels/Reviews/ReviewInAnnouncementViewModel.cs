@@ -24,7 +24,10 @@
             configuration.CreateMap<Review, ReviewInAnnouncementViewModel>()
                  .ForMember(
                  x => x.UserProfilePicture,
-                 c => c.MapFrom(t => t.User.ProfilePicture == null ? GlobalConstants.DefaultProfilePicture : t.User.ProfilePicture));
+                 c => c.MapFrom(t => t.User.ProfilePicture == null ? GlobalConstants.DefaultProfilePicture : t.User.ProfilePicture))
+                 .ForMember(
+                x => x.UserName,
+                c => c.MapFrom(t => t.User.Name == null ? t.User.Email : t.User.Name));
         }
     }
 }

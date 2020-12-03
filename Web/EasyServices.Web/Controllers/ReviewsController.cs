@@ -18,7 +18,7 @@
 
         public ReviewsController(
             UserManager<ApplicationUser> userManager,
-            IReviewsService reviewsService, 
+            IReviewsService reviewsService,
             IAnnouncementsService announcementsService)
         {
             this.userManager = userManager;
@@ -35,6 +35,8 @@
             review.Announcement = await this.announcementsService.GetByIdAsync(review.AnnouncementId);
 
             await this.reviewsService.CreateAsync(review);
+
+            this.TempData["Message"] = "Успешно оценихте обявата!";
 
             return this.RedirectToAction("Details", "Announcements", new { id = review.AnnouncementId });
         }
