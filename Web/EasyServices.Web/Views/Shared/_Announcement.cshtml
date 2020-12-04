@@ -36,15 +36,7 @@
             <a asp-controller="Announcements"
                asp-action="Details"
                asp-route-id="@Model.Id"
-               class="btn-sm btn-primary">@Model.PriceAsString</a>
-
-            @if (User.IsInRole("Administrator") || Model.UserId == userId)
-            {
-                <a asp-controller="Announcements"
-                   asp-action="Delete"
-                   asp-route-id="@Model.Id"
-                   class="btn-sm btn-danger">Изтрий</a>
-            }
+               class="btn-sm btn-primary" title="Виж Детайли">@Model.PriceAsString</a>
         </div>
-    </div>
+        </div>
 </div>

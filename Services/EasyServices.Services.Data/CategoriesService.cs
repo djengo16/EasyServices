@@ -13,10 +13,14 @@
     public class CategoriesService : ICategoriesService
     {
         private readonly IDeletableEntityRepository<Category> categoriesRepository;
+        private readonly ISubCategoriesService subCategoriesService;
 
-        public CategoriesService(IDeletableEntityRepository<Category> categoriesRepository)
+        public CategoriesService(
+            IDeletableEntityRepository<Category> categoriesRepository,
+            ISubCategoriesService subCategoriesService)
         {
             this.categoriesRepository = categoriesRepository;
+            this.subCategoriesService = subCategoriesService;
         }
 
         public IEnumerable<T> GetAll<T>()
@@ -78,6 +82,13 @@
         public async Task DeleteCategory(int categoryId)
         {
             var category = this.GetById(categoryId);
+            ;
+            var subCategories = this.subCategoriesService.GetAllByCategoryId(categoryId);
+
+            foreach (var subCategory in subCategories)
+            {
+                await this.subCategoriesService.DeleteSubCategory(subCategory.Id);
+            }
 
             this.categoriesRepository.Delete(category);
 

@@ -89,6 +89,8 @@
 
         public T GetDetails<T>(string id)
         {
+            var test = this.announcementsRepository.All().FirstOrDefault(x => x.Id == id);
+
             var announcement =
                    this.announcementsRepository
                      .All()
@@ -165,8 +167,10 @@
         {
             var queryModel =
                 this.announcementsRepository.All()
-                .Where(x => cityId != null ? x.CityId == cityId : true &&
-                subCategoryId != null ? x.SubCategoryId == subCategoryId : true);
+                .Where(x => cityId != null ? x.CityId == cityId : true);
+
+            queryModel = queryModel
+                .Where(x => subCategoryId != null ? x.SubCategoryId == subCategoryId : true);
 
             if (keywords != null)
             {

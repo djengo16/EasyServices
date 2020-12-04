@@ -78,13 +78,12 @@
         }
 
         [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            var currentUrl = this.HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Referer").Value;
-
             await this.announcementsService.DeleteAsync(id);
 
-            return this.Redirect(currentUrl);
+            return this.Redirect("/Home/Index");
         }
 
         [Authorize]
@@ -177,6 +176,7 @@
             return this.View(viewModel);
         }
 
+        [HttpPost]
         public async Task<IActionResult> DeleteAnnouncementPhoto(string announcementId, string imgUrl)
         {
             await this.announcementsService.DeleteAnnouncementPhoto(imgUrl, announcementId);

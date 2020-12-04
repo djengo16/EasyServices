@@ -3,18 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
 
     using EasyServices.Data.Models;
-    using Microsoft.EntityFrameworkCore.Internal;
 
     public class AnnouncementsSeeder : ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            ;
-            if (dbContext.Announcements.Count() >= 50)
+            if (dbContext.Announcements.Count() != 0)
             {
                 return;
             }
@@ -24,8 +21,8 @@
             var announcements = new List<Announcement>();
             var tags = dbContext.Tags.ToList();
             var users = dbContext.Users.ToList();
-            var categories = dbContext.Categories.ToList();
-            var subCategories = dbContext.SubCategories.ToList();
+            var categories = dbContext.Categories.Where(x => x.IsDeleted == false).ToList();
+            var subCategories = dbContext.SubCategories.Where(x => x.IsDeleted == false).ToList();
             var cities = dbContext.Cities.ToList();
 
             int firstCategoryId = categories.FirstOrDefault().Id;

@@ -98,9 +98,16 @@
                             </button>
                             @if (User.IsInRole("Administrator") || Model.User.Id == userId)
                             {
-                                <a asp-controller="Announcements"
-                                   asp-action="Edit"
-                                   asp-route-id="@Model.Id" class="btn-sm btn-info">Редактирай обявата</a>
+                                
+                                    <a asp-controller="Announcements"
+                                       asp-action="Edit"
+                                       asp-route-id="@Model.Id" class="btn-sm btn-info">Редактирай</a>
+                               
+                                    <div class="m-xl-2">                                        
+                                        <form method="post" asp-action="Delete" id="deleteForm" asp-route-id="@Model.Id">
+                                        </form>
+                                        <button class="btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal">Изтрий</button>
+                                    </div>
                             }
                             <!-- The Modal -->
                             <div class="modal" id="myModal">
@@ -129,7 +136,11 @@
                                                     </div>
                                                     <div>
                                                         <label for="Comment"></label>
-                                                        <textarea placeholder="Коментар" maxlength="150" name="Comment" id="Comment" class="form-control"></textarea>
+                                                        <textarea placeholder="Коментар"
+                                                                  maxlength="150"
+                                                                  name="Comment"
+                                                                  id="Comment"
+                                                                  class="form-control"></textarea>
                                                     </div>
 
                                                     <br />
@@ -170,11 +181,12 @@
                                     @if (User.IsInRole("Administrator") || Model.User.Id == userId)
                                     {
                                         <div class="carousel-caption d-none d-md-block">
-                                            <a class="small badge-danger"
-                                               asp-controller="Announcements"
-                                               asp-action="DeleteAnnouncementPhoto"
-                                               asp-route-imgUrl="@image.Url"
-                                               asp-route-announcementId="@Model.Id">Изтрий снимката</a>
+                                            <form method="post" asp-controller="Announcements"
+                                                   asp-action="DeleteAnnouncementPhoto"
+                                                   asp-route-imgUrl="@image.Url"
+                                                   asp-route-announcementId="@Model.Id">
+                                                <button type="submit" class="small badge-danger" >Изтрий снимката</button>
+                                            </form>
                                         </div>
                                     }
                                 </div>
@@ -225,7 +237,7 @@
 
     <hr />
     @Html.Raw(Model.SanitizedDescription)
-<hr />
+    <hr />
 
     <section class="container">
         <div class="row mt-5">
@@ -265,6 +277,20 @@
             </div>
         </div>
     </section>
+
+    <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Искате ли да изтриете "@Model.Title"?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="deleteForm.submit()">Да</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Не</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
