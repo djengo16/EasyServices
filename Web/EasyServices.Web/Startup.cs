@@ -73,7 +73,7 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration["SendGrid:ApiKey"]));
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
@@ -122,8 +122,16 @@
             app.UseEndpoints(
                 endpoints =>
                     {
-                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                        endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapControllerRoute(
+                            "areaRoute",
+                            "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapControllerRoute(
+                            "default",
+                            "{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapControllerRoute(
+                            "contacts",
+                            "/contacts",
+                            new { controller = "Home", action = "Contacts" });
                         endpoints.MapRazorPages();
                         endpoints.MapBlazorHub();
                     });

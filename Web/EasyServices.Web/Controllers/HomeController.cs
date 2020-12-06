@@ -3,11 +3,13 @@
     using System.Diagnostics;
     using System.Threading.Tasks;
 
+    using EasyServices.Common;
     using EasyServices.Services.Data;
+    using EasyServices.Services.Messaging;
     using EasyServices.Web.ViewModels;
     using EasyServices.Web.ViewModels.Announcements;
     using EasyServices.Web.ViewModels.Home;
-
+    using EasyServices.Web.ViewModels.Mail;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
@@ -17,19 +19,22 @@
         private readonly ICategoriesService categoriesService;
         private readonly IUsersService usersService;
         private readonly ISubCategoriesService subCategoriesService;
+        private readonly IEmailSender emailSender;
 
         public HomeController(
             IAnnouncementsService announcementsService,
             ICitiesService citiesService,
             ICategoriesService categoriesService,
             IUsersService usersService,
-            ISubCategoriesService subCategoriesService)
+            ISubCategoriesService subCategoriesService,
+            IEmailSender emailSender)
         {
             this.announcementsService = announcementsService;
             this.citiesService = citiesService;
             this.categoriesService = categoriesService;
             this.usersService = usersService;
             this.subCategoriesService = subCategoriesService;
+            this.emailSender = emailSender;
         }
 
         public async Task<IActionResult> Index()
@@ -45,6 +50,33 @@
             };
 
             return this.View(viewModel);
+        }
+
+        public IActionResult Contacts()
+        {
+            var viewModel = new SendMailInputModel();
+
+            viewModel.SenderMailAddress = this.User.Identity.Name;
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Contacts(SendMailInputModel inpumodel)
+        {
+
+            var html = "<p>" + inpumodel.Content + "</p>";
+
+            await this.emailSender.SendEmailAsync(
+                inpumodel.SenderMailAddress,
+                inpumodel.SenderMailAddress,
+                "stu1801261051@uni-plovdiv.bg",
+                inpumodel.Title,
+                html);
+
+            this.TempData["Message"] = SuccesMessages.SuccessfulySendMail;
+
+            return this.RedirectToAction();
         }
 
         public IActionResult Privacy()

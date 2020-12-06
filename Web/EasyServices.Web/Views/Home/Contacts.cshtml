@@ -1,0 +1,51 @@
+﻿@model EasyServices.Web.ViewModels.Mail.SendMailInputModel
+@{
+    this.ViewData["Title"] = "Пишете ни";
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>@this.TempData["Message"]</strong>
+    </div>
+}
+
+<h2 class="text-center">@this.ViewData["Title"]</h2>
+<hr />
+<form method="post">
+    <div class="form-row justify-content-center">
+        <div class="col-4">
+            <label class="sr-only" asp-for="@Model.Title">Заглавие</label>
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="far fa-comment"></i></div>
+                </div>
+                <input type="text" class="form-control" placeholder="Заглавие" asp-for="@Model.Title">
+                <span asp-validation-for="@Model.Title" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-4">
+            <label class="sr-only" asp-for="@Model.SenderMailAddress">Имейл</label>
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="far fa-envelope"></i></div>
+                </div>
+                <input type="text" class="form-control" placeholder="Имейл" asp-for="@Model.SenderMailAddress">
+            </div>
+            <span asp-validation-for="@Model.SenderMailAddress" class="text-danger"></span>
+        </div>
+    </div>
+    <br />
+    <div class="form-group offset-2 col-8">
+        <textarea asp-for="@Model.Content" rows="5" placeholder="Съдържание" class="form-control"></textarea>
+        <span asp-validation-for="@Model.Content" class="text-danger"></span>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Изпрати</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

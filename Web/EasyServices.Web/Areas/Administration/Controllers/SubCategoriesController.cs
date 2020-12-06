@@ -9,12 +9,10 @@
     public class SubCategoriesController : AdministrationController
     {
         private readonly ISubCategoriesService subCategoriesService;
-        private readonly ICategoriesService categoriesService;
 
-        public SubCategoriesController(ISubCategoriesService subCategoriesService, ICategoriesService categoriesService)
+        public SubCategoriesController(ISubCategoriesService subCategoriesService)
         {
             this.subCategoriesService = subCategoriesService;
-            this.categoriesService = categoriesService;
         }
 
         [HttpPost]

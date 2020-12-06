@@ -19,5 +19,7 @@
         public const string WebSiteIcon = "https://i.ibb.co/K9n3vv3/globe.png";
 
         public const string DefaultProfilePicture = "https://icon-library.com/images/default-profile-icon/default-profile-icon-16.jpg";
+
+        public const string SiteMail = "djengizibrqmov@gmail.com";
     }
 }

@@ -82,7 +82,7 @@
         public async Task DeleteCategory(int categoryId)
         {
             var category = this.GetById(categoryId);
-            ;
+
             var subCategories = this.subCategoriesService.GetAllByCategoryId(categoryId);
 
             foreach (var subCategory in subCategories)

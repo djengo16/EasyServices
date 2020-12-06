@@ -18,7 +18,7 @@
                    asp-controller="Notifications"
                    asp-action="All"
                    asp-route-userId="@userId"
-                   title="Notifications">
+                   title="Известия">
                     <i class="far fa-bell fa-1x fa-fill"></i>
                     <span class="badge badge-warning notification-badge">
                         @(await this.notificationsService.GetUnreadUserNotificationsCount(userId))

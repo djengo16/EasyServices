@@ -9,5 +9,13 @@
         public const string InvalidPriceMessage = "Въведете правилна цена!";
 
         public const string CategoryRequirement = "Категорията е задължителна!";
+
+        public const string TooBigMailTitle = "Твърде голямо заглавие!";
+
+        public const string TooBigMailContent = "Твърде голямо съдържание!";
+
+        public const string InvalidMail = "Имейл адресът е невалиден!";
+
+        public const string RequiredField = "Полето е задължително!";
     }
 }

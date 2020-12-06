@@ -52,11 +52,6 @@
             return this.subCategoriesRepository.All().FirstOrDefault(x => x.Id == id).Name;
         }
 
-        public int GetIdByName(string name)
-        {
-            return this.subCategoriesRepository.All().FirstOrDefault(x => x.Name.ToLower() == name.ToLower()).Id;
-        }
-
         public T GetById<T>(int id)
         {
             var category = this.subCategoriesRepository.All()

@@ -16,8 +16,6 @@
 
         int GetCategoryId(int subcategoryId);
 
-        int GetIdByName(string name);
-
         T GetById<T>(int id);
 
         Task AddSubCategory(AddSubCategoryInputModel inputModel);

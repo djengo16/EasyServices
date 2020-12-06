@@ -19,17 +19,17 @@
 
         @foreach (var user in users)
         {
-          <hr />
-        <li class="media">
-            <img src="@user.ProfilePicture" width="50" alt="...">
-            <div class="media-body">
-                <h5  class="m-2"><a href="/Users/Profile/@user.Id">@user.Email</a></h5>
-                <p class="m-1 small">@user.Name</p>
-            </div>
-        </li>
-
+            <hr />
+            <li class="media">
+                <img src="@user.ProfilePicture" width="50" alt="...">
+                <div class="media-body">
+                    <h5 class="m-2"><a href="/Users/Profile/@user.Id">@user.Email</a></h5>
+                    <p class="m-1 small">@user.Name</p>
+                </div>
+            </li>
         }
     </ul>
+
 }
 
 @code {
