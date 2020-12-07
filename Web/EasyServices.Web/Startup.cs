@@ -84,6 +84,7 @@
             services.AddTransient<ITagsService, TagsService>();
             services.AddTransient<INotificationsService, NotificationsService>();
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IImagesService, ImagesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

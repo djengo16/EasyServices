@@ -177,18 +177,7 @@
                             {
 
                                 <div class="carousel-item @type">
-                                    <img class="d-block w-100 img-responsive img-service cropped" src="@image.Url" alt="">
-                                    @if (User.IsInRole("Administrator") || Model.User.Id == userId)
-                                    {
-                                        <div class="carousel-caption d-none d-md-block">
-                                            <form method="post" asp-controller="Announcements"
-                                                   asp-action="DeleteAnnouncementPhoto"
-                                                   asp-route-imgUrl="@image.Url"
-                                                   asp-route-announcementId="@Model.Id">
-                                                <button type="submit" class="small badge-danger" >Изтрий снимката</button>
-                                            </form>
-                                        </div>
-                                    }
+                                    <img class="d-block w-100 img-responsive img-service cropped" src="@image.Url" alt="@Model.Title">                                    
                                 </div>
                                 type = "";
 

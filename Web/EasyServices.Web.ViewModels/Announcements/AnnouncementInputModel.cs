@@ -36,7 +36,7 @@
         [Required(AllowEmptyStrings = false, ErrorMessage = ErrorMessages.CategoryRequirement)]
         public int SubCategoryId { get; set; }
 
-        [Display(Name = "Снимки на ваши проекти")]
+        [Display(Name = "(Снимки на ваши проекти)")]
         public IEnumerable<IFormFile> Images { get; set; }
 
         [Display(Name = "Тагове")]

@@ -16,29 +16,26 @@
     public class AnnouncementsService : IAnnouncementsService
     {
         private readonly IDeletableEntityRepository<Announcement> announcementsRepository;
-        private readonly IRepository<Image> imagesRepository;
-        private readonly Cloudinary cloudinary;
         private readonly ISubCategoriesService subCategoriesService;
         private readonly ITagsService tagsService;
         private readonly ICitiesService citiesService;
         private readonly ApplicationDbContext context;
+        private readonly IImagesService imagesService;
 
         public AnnouncementsService(
             IDeletableEntityRepository<Announcement> announcementsRepository,
-            IRepository<Image> imagesRepository,
-            Cloudinary cloudinary,
             ISubCategoriesService subCategoriesService,
             ITagsService tagsService,
             ICitiesService citiesService,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IImagesService imagesService)
         {
             this.announcementsRepository = announcementsRepository;
-            this.imagesRepository = imagesRepository;
-            this.cloudinary = cloudinary;
             this.subCategoriesService = subCategoriesService;
             this.tagsService = tagsService;
             this.citiesService = citiesService;
             this.context = context;
+            this.imagesService = imagesService;
         }
 
         public async Task<string> CreateAsync(AnnouncementInputModel announcementInputModel)
@@ -54,7 +51,7 @@
                 CategoryId = this.subCategoriesService.GetCategoryId(announcementInputModel.SubCategoryId),
             };
 
-            await this.AddImagesToAnnouncement(announcementInputModel, announcement);
+            await this.imagesService.AddImagesToAnnouncement(announcementInputModel, announcement);
 
             await this.GetOrCreateTagsAsync(announcementInputModel, announcement);
 
@@ -70,7 +67,7 @@
 
             foreach (var image in announcement.Images)
             {
-                await CloudinaryHelper.RemoveFileAsync(this.cloudinary, image.Url);
+                await this.imagesService.DeleteAnnouncementPhoto(image.Url, id);
             }
 
             this.announcementsRepository.Delete(announcement);
@@ -84,7 +81,11 @@
 
         public async Task<Announcement> GetByIdAsync(string id)
         {
-            return await this.announcementsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            var announcement = await this.announcementsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+            announcement.Images = this.imagesService.GetAnnouncementImages(id).ToList();
+
+            return announcement;
         }
 
         public T GetDetails<T>(string id)
@@ -103,7 +104,8 @@
 
         public async Task<string> UpdateAsync(UpdateAnnouncementViewModel announcementInputModel, string id)
         {
-            var announcement = this.announcementsRepository.All().FirstOrDefault(x => x.Id == id);
+            ;
+            var announcement = await this.GetByIdAsync(id);
 
             announcement.Title = announcementInputModel.Title;
             announcement.Description = announcementInputModel.Description;
@@ -112,7 +114,30 @@
             announcement.CategoryId = this.subCategoriesService.GetCategoryId(announcementInputModel.SubCategoryId);
             announcement.CityId = announcementInputModel.CityId;
 
-            await this.AddImagesToAnnouncement(announcementInputModel, announcement);
+            // Check if user removed existing images and removing them
+            var imagesToDelete = new List<string>();
+
+            foreach (var currentImg in announcement.Images)
+            {
+                if (!announcementInputModel.ImagesUrl.Contains(currentImg.Url))
+                {
+                    imagesToDelete.Add(currentImg.Url);
+                }
+            }
+
+            if (imagesToDelete.Any())
+            {
+                foreach (var current in imagesToDelete)
+                {
+                    await this.imagesService.DeleteAnnouncementPhoto(current, announcement.Id);
+                }
+            }
+
+            // upload the new images if it's any
+            if (announcementInputModel.Images != null)
+            {
+                await this.imagesService.AddImagesToAnnouncement(announcementInputModel, announcement);
+            }
 
             this.context.AnnouncementTags
                 .RemoveRange(this.context.AnnouncementTags.Where(x => x.AnnouncementId == announcement.Id).ToList());
@@ -122,17 +147,6 @@
             await this.announcementsRepository.SaveChangesAsync();
 
             return announcement.Id;
-        }
-
-        public async Task DeleteAnnouncementPhoto(string imgUrl, string announcementId)
-        {
-            var announcement = await this.announcementsRepository.GetByIdWithDeletedAsync(announcementId);
-            var imageToRemove = await this.imagesRepository.All().FirstOrDefaultAsync(x => x.Url == imgUrl);
-
-            this.imagesRepository.Delete(imageToRemove);
-            await this.imagesRepository.SaveChangesAsync();
-
-            await CloudinaryHelper.RemoveFileAsync(this.cloudinary, imgUrl);
         }
 
         public async Task<IEnumerable<T>> GetLastAsync<T>(int count)
@@ -242,21 +256,6 @@
                     TagId = tagId,
                     Announcement = announcement,
                 });
-            }
-        }
-
-        private async Task AddImagesToAnnouncement(AnnouncementInputModel announcementInputModel, Announcement announcement)
-        {
-            if (announcementInputModel.Images != null)
-            {
-                foreach (var image in announcementInputModel.Images)
-                {
-                    announcement.Images.Add(new Image
-                    {
-                        AnnouncementId = announcement.Id,
-                        Url = await CloudinaryHelper.UploadFileAsync(this.cloudinary, image, false),
-                    });
-                }
             }
         }
     }

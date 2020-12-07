@@ -70,7 +70,7 @@
             await this.emailSender.SendEmailAsync(
                 inpumodel.SenderMailAddress,
                 inpumodel.SenderMailAddress,
-                "stu1801261051@uni-plovdiv.bg",
+                GlobalConstants.SiteMail,
                 inpumodel.Title,
                 html);
 

@@ -100,10 +100,35 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Images"></label>
-        <input asp-for="Images" class="form-control" multiple />
+
+    <div class="containerimg">
+        <fieldset class="form-group">
+            <a href="javascript:void(0)" onclick="$('#pro-image').click()">Добави</a>
+            <label asp-for="Images"></label>
+            <input asp-for="Images" type="file" id="pro-image" style="display: none;" class="form-control" multiple />
+        </fieldset>
+        <div class="preview-images-zone">
+            @for (int i = 1; i <= Model.ImagesUrl.Count(); i++)
+            {
+                <div class="preview-image preview-show-@i">
+                    <div class="image-cancel" data-no="@i">x</div>
+                    <div class="image-zone">
+                        <img id="pro-img-@i" src="@Model.ImagesUrl.ElementAt(i-1)">
+                        <input type="hidden" asp-for="ImagesUrl" value="@Model.ImagesUrl.ElementAt(i-1)" />
+                    </div>
+                    <div class="tools-edit-image">
+                        <a href="javascript:void(0)" data-no="@i" class="btn btn-light btn-edit-image">edit</a>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
+    <br />
+
+    @*<div class="form-group">
+            <label asp-for="Images"></label>
+            <input asp-for="Images" class="form-control" multiple />
+        </div>*@
     <input type="submit" class="btn btn-primary" />
 </form>
 
@@ -112,7 +137,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
+    <script src="~/js/image-upoad.js" asp-append-version="true"></script>
     <script>
         $(document).ready(function () {
             $(".mul-select").select2({

@@ -18,8 +18,6 @@
 
         Task<int> GetCountBySubCategoryIdAsync(int subCategoryId);
 
-        Task DeleteAnnouncementPhoto(string imgUrl, string announcementId);
-
         Task<string> UpdateAsync(UpdateAnnouncementViewModel announcementInputModel, string id);
 
         Task<IEnumerable<T>> GetLastAsync<T>(int count);

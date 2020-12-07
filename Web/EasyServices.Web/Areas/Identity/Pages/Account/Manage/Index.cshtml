@@ -11,7 +11,12 @@
     <div class="col-md-6">
         <hr />
         <form id="profile-form" method="post" enctype="multipart/form-data">
-            <div class="image-area mt-4"><img id="imageResult" src="@Model.Input.ProfilePictureUrl" alt="" class="img-thumbnail rounded"></div>
+            <div class="image-area mt-4">
+                <img id="imageResult" 
+                     src="@Model.Input.ProfilePictureUrl" 
+                     alt="Профилна снимка" 
+                     class="img-thumbnail rounded">
+            </div>
             <input e id="upload" name="file" type="file" onchange="readURL(this);">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -43,3 +48,29 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imageResult')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(function () {
+        $('#upload').on('change', function () {
+            readURL(input);
+        });
+    });
+
+    var input = document.getElementById('upload');
+    var infoArea = document.getElementById('upload-label');
+    input.addEventListener('change', showFileName);
+    function showFileName(event) {
+        var input = event.srcElement;
+        var fileName = input.files[0].name;
+        infoArea.textContent = 'File name: ' + fileName;
+    }
+</script>

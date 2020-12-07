@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
     public class AnnouncementsController : BaseController
     {
@@ -52,7 +53,6 @@
         [Authorize]
         public async Task<IActionResult> Create(AnnouncementInputModel inputModel)
         {
-
             if (!this.ModelState.IsValid)
             {
                 inputModel.TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>();
@@ -89,6 +89,7 @@
         [Authorize]
         public async Task<IActionResult> Edit(string id)
         {
+
             var currentLoggedUser = this.userManager.GetUserId(this.HttpContext.User);
             var announcement = await this.announcementsService.GetByIdAsync(id);
 
@@ -103,6 +104,7 @@
                 CitiesItems = this.citiesService.GetAllAsKeyValuePairs(),
                 Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>(),
                 TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>(),
+                ImagesUrl = announcement.Images.Select(x => x.Url).ToList(),
             };
 
             if (currentLoggedUser != announcement.UserId && !this.User.IsInRole("Administrator"))
@@ -136,6 +138,7 @@
                     Price = inputModel.Price,
                     CityId = inputModel.CityId,
                     SubCategoryId = inputModel.SubCategoryId,
+                    ImagesUrl = announcement.Images.Select(x => x.Url).ToList(),
                 };
 
                 currentInput.TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>();
@@ -174,14 +177,6 @@
             viewModel.CurrentPage = page;
 
             return this.View(viewModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> DeleteAnnouncementPhoto(string announcementId, string imgUrl)
-        {
-            await this.announcementsService.DeleteAnnouncementPhoto(imgUrl, announcementId);
-
-            return this.RedirectToAction("Details", new { id = announcementId });
         }
     }
 }
