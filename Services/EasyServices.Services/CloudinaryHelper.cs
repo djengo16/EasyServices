@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.IO;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
     using CloudinaryDotNet;
@@ -15,8 +17,14 @@
         {
             List<string> images = new List<string>();
 
+
             foreach (var file in files)
             {
+                if (IsFileValid(file))
+                {
+                    break;
+                }
+
                 byte[] byteImage;
 
                 using var memoryStream = new MemoryStream();
@@ -42,6 +50,11 @@
 
         public static async Task<string> UploadFileAsync(Cloudinary cloudinary, IFormFile file, bool isProfilePicture)
         {
+            if (!IsFileValid(file))
+            {
+                return null;
+            }
+
             byte[] byteImage;
 
             using var memoryStream = new MemoryStream();
@@ -74,6 +87,26 @@
             var result = await cloudinary.UploadAsync(uploadParams);
 
             return result.Uri.AbsoluteUri;
+        }
+
+        public static bool IsFileValid(IFormFile photoFile)
+        {
+            if (photoFile == null)
+            {
+                return true;
+            }
+
+            string[] validTypes = new string[]
+            {
+                "image/x-png", "image/gif", "image/jpeg", "image/jpg", "image/png", "image/gif", "image/svg",
+            };
+
+            if (validTypes.Contains(photoFile.ContentType) == false)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public static async Task RemoveFileAsync(Cloudinary cloudinary, string url)

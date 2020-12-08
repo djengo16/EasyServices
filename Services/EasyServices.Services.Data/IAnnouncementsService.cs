@@ -18,7 +18,7 @@
 
         Task<int> GetCountBySubCategoryIdAsync(int subCategoryId);
 
-        Task<string> UpdateAsync(UpdateAnnouncementViewModel announcementInputModel, string id);
+        Task<string> UpdateAsync(UpdateAnnouncementInputModel announcementInputModel, string id);
 
         Task<IEnumerable<T>> GetLastAsync<T>(int count);
 

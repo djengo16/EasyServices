@@ -10,7 +10,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
     public class AnnouncementsController : BaseController
     {
@@ -93,7 +92,7 @@
             var currentLoggedUser = this.userManager.GetUserId(this.HttpContext.User);
             var announcement = await this.announcementsService.GetByIdAsync(id);
 
-            var viewModel = new UpdateAnnouncementViewModel
+            var viewModel = new UpdateAnnouncementInputModel
             {
                 UserId = announcement.UserId,
                 Description = announcement.Description,
@@ -105,6 +104,7 @@
                 Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>(),
                 TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>(),
                 ImagesUrl = announcement.Images.Select(x => x.Url).ToList(),
+                Tags = this.tagsService.GetNamesByAnnouncementId(announcement.Id),
             };
 
             if (currentLoggedUser != announcement.UserId && !this.User.IsInRole("Administrator"))
@@ -117,7 +117,7 @@
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Edit(UpdateAnnouncementViewModel inputModel, string id)
+        public async Task<IActionResult> Edit(UpdateAnnouncementInputModel inputModel, string id)
         {
             var announcement = await this.announcementsService.GetByIdAsync(id);
             var currentLoggedUser = this.userManager.GetUserId(this.HttpContext.User);
@@ -129,7 +129,7 @@
 
             if (!this.ModelState.IsValid)
             {
-                var currentInput = new UpdateAnnouncementViewModel
+                var currentInput = new UpdateAnnouncementInputModel
                 {
                     UserId = currentLoggedUser,
                     Id = id,

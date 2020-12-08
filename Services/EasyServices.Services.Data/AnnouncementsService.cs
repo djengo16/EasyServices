@@ -5,8 +5,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using CloudinaryDotNet;
-    using EasyServices.Data;
     using EasyServices.Data.Common.Repositories;
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
@@ -19,7 +17,6 @@
         private readonly ISubCategoriesService subCategoriesService;
         private readonly ITagsService tagsService;
         private readonly ICitiesService citiesService;
-        private readonly ApplicationDbContext context;
         private readonly IImagesService imagesService;
 
         public AnnouncementsService(
@@ -27,14 +24,12 @@
             ISubCategoriesService subCategoriesService,
             ITagsService tagsService,
             ICitiesService citiesService,
-            ApplicationDbContext context,
             IImagesService imagesService)
         {
             this.announcementsRepository = announcementsRepository;
             this.subCategoriesService = subCategoriesService;
             this.tagsService = tagsService;
             this.citiesService = citiesService;
-            this.context = context;
             this.imagesService = imagesService;
         }
 
@@ -53,7 +48,7 @@
 
             await this.imagesService.AddImagesToAnnouncement(announcementInputModel, announcement);
 
-            await this.GetOrCreateTagsAsync(announcementInputModel, announcement);
+            await this.tagsService.GetOrUpdateTagsAsync(announcementInputModel, announcement);
 
             await this.announcementsRepository.AddAsync(announcement);
             await this.announcementsRepository.SaveChangesAsync();
@@ -102,9 +97,8 @@
             return announcement;
         }
 
-        public async Task<string> UpdateAsync(UpdateAnnouncementViewModel announcementInputModel, string id)
+        public async Task<string> UpdateAsync(UpdateAnnouncementInputModel announcementInputModel, string id)
         {
-            ;
             var announcement = await this.GetByIdAsync(id);
 
             announcement.Title = announcementInputModel.Title;
@@ -133,16 +127,16 @@
                 }
             }
 
-            // upload the new images if it's any
+            // upload the new images if there's any
             if (announcementInputModel.Images != null)
             {
                 await this.imagesService.AddImagesToAnnouncement(announcementInputModel, announcement);
             }
 
-            this.context.AnnouncementTags
-                .RemoveRange(this.context.AnnouncementTags.Where(x => x.AnnouncementId == announcement.Id).ToList());
-
-            await this.GetOrCreateTagsAsync(announcementInputModel, announcement);
+            if (announcementInputModel.Tags.Any())
+            {
+                await this.tagsService.GetOrUpdateTagsAsync(announcementInputModel, announcement);
+            }
 
             await this.announcementsRepository.SaveChangesAsync();
 
@@ -230,33 +224,6 @@
             }
 
             return queryModel.Count();
-        }
-
-        private async Task GetOrCreateTagsAsync(AnnouncementInputModel announcementInputModel, Announcement announcement)
-        {
-            foreach (var tag in announcementInputModel.Tags)
-            {
-                int tagId;
-                if (tag.Length > 50)
-                {
-                    continue;
-                }
-
-                if (!this.tagsService.CheckIfExist(tag))
-                {
-                    tagId = await this.tagsService.Create(tag);
-                }
-                else
-                {
-                    tagId = this.tagsService.FindTagId(tag);
-                }
-
-                announcement.Tags.Add(new AnnouncementTag
-                {
-                    TagId = tagId,
-                    Announcement = announcement,
-                });
-            }
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class UpdateAnnouncementViewModel : AnnouncementInputModel
+    public class UpdateAnnouncementInputModel : AnnouncementInputModel
     {
         public string Id { get; set; }
 
