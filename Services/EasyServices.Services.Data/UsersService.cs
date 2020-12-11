@@ -36,6 +36,13 @@
             return this.usersRepository.All().Count();
         }
 
+        public string GetProfilePictureUrl(string userId)
+        {
+            var profilePicture = userId == null ? null : this.usersRepository.All().FirstOrDefault(x => x.Id == userId).ProfilePicture;
+
+            return profilePicture;
+        }
+
         public T GetUserById<T>(string userId)
         {
             var userModel = this.usersRepository

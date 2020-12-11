@@ -4,8 +4,10 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @inject EasyServices.Services.Data.INotificationsService notificationsService
-@{ 
+@inject EasyServices.Services.Data.IUsersService usersService
+@{
     var userId = this.UserManager.GetUserId(this.User);
+    var profilePicutre = this.usersService.GetProfilePictureUrl(userId);
 }
 
 
@@ -13,7 +15,7 @@
         @if (this.SignInManager.IsSignedIn(this.User))
         {
             <li class="nav-item">
-                <a class="btn" 
+                <a class="btn"
                    asp-area=""
                    asp-controller="Notifications"
                    asp-action="All"
@@ -26,11 +28,15 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark"
+                <a class="nav-link text-dark btn-success rounded"
                    asp-area="Identity"
-                   asp-page="/Account/Manage/Index" title="Редактирай">Профил</a>
+                   asp-page="/Account/Manage/Index" title="Редактирай">
+                    <img src="@profilePicutre"
+                         class="rounded-circle z-depth-0"
+                         alt="avatar image"
+                         height="35" />  Профил
+                </a>
             </li>
-
             if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 <li class="nav-item">

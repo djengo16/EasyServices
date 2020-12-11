@@ -1,9 +1,7 @@
 ﻿namespace EasyServices.Services.Data
 {
     using System.Collections.Generic;
-    using System.IO.Compression;
     using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
 
     using EasyServices.Data.Common.Repositories;
@@ -114,8 +112,8 @@
                 }
             }
 
-            ;
-            // Delete tags if user removed them
+            // Delete tags if user removed them while editing the announcement
+            // Only if type is UpdateAnnouncementInputModel..
             if (announcementInputModel.GetType() == typeof(UpdateAnnouncementInputModel))
             {
                 foreach (var currentTag in actualAnnouncementTags)

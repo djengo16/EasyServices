@@ -18,36 +18,38 @@
             this.notificationsService = notificationsService;
         }
 
-        public async Task CreateAsync(ReviewInputModel review)
+        public async Task<Review> CreateAsync(ReviewInputModel reviewInput)
         {
-            var userId = review.User.Id;
+            var userId = reviewInput.UserId;
 
-            var existingReview = this.reviewsRepository.All()
-                .FirstOrDefault(x => x.AnnouncementId == review.AnnouncementId && x.UserId == userId);
+            var review = this.reviewsRepository.All()
+                .FirstOrDefault(x => x.AnnouncementId == reviewInput.AnnouncementId && x.UserId == userId);
 
-            if (existingReview == null)
+            if (review == null)
             {
-                var newReview = new Review
+                review = new Review
                 {
-                    Announcement = review.Announcement,
-                    Comment = review.Comment,
-                    Rating = review.Rate,
-                    User = review.User,
+                    AnnouncementId = reviewInput.AnnouncementId,
+                    Comment = reviewInput.Comment,
+                    Rating = reviewInput.Rate,
+                    UserId = reviewInput.UserId,
                 };
 
-                await this.notificationsService.AddNotificationFromReviewAsync(newReview);
+                await this.notificationsService.AddNotificationFromReviewAsync(review);
 
-                await this.reviewsRepository.AddAsync(newReview);
+                await this.reviewsRepository.AddAsync(review);
             }
             else
             {
-                existingReview.Rating = review.Rate;
-                existingReview.Comment = review.Comment;
+                review.Rating = reviewInput.Rate;
+                review.Comment = reviewInput.Comment;
 
-                this.reviewsRepository.Update(existingReview);
+                this.reviewsRepository.Update(review);
             }
 
             await this.reviewsRepository.SaveChangesAsync();
+
+            return review;
         }
 
         public async Task DeleteAsync(int reviewId)

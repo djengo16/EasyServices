@@ -208,7 +208,6 @@
             <div class="col-12">
                 <div class="has-description">
                     <h2>Oписание на услугата</h2>
-                    <p>Тагове</p>
                     <div class="row">
 
                         <br />
@@ -227,7 +226,8 @@
     <hr />
     @Html.Raw(Model.SanitizedDescription)
     <hr />
-
+@if (Model.Reviews.Any())
+{
     <section class="container">
         <div class="row mt-5">
             <div class="col"><h2 class="is-bold">Детайлен рейтинг</h2></div>
@@ -266,7 +266,7 @@
             </div>
         </div>
     </section>
-
+}
     <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

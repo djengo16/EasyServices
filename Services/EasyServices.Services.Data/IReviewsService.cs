@@ -6,7 +6,7 @@
 
     public interface IReviewsService
     {
-        Task CreateAsync(ReviewInputModel review);
+        Task<Review> CreateAsync(ReviewInputModel review);
 
         Task DeleteAsync(int reviewId);
     }

@@ -70,7 +70,7 @@
             await this.emailSender.SendEmailAsync(
                 inpumodel.SenderMailAddress,
                 inpumodel.SenderMailAddress,
-                GlobalConstants.SiteMail,
+                "easyservices16@protonmail.com",
                 inpumodel.Title,
                 html);
 
