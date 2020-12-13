@@ -18,7 +18,9 @@
 
         T GetById<T>(int id);
 
-        Task AddSubCategory(AddSubCategoryInputModel inputModel);
+        SubCategory GetById(int id);
+
+        Task<SubCategory> AddSubCategory(AddSubCategoryInputModel inputModel);
 
         Task EditSubCategory(EditSubCategoryModel inputModel);
 

@@ -54,22 +54,26 @@
 
         public T GetById<T>(int id)
         {
-            var category = this.subCategoriesRepository.All()
+            var subCategory = this.subCategoriesRepository.All()
                .Where(x => x.Id == id)
                .To<T>().FirstOrDefault();
 
-            return category;
+            return subCategory;
         }
 
-        public async Task AddSubCategory(AddSubCategoryInputModel inputModel)
+        public async Task<SubCategory> AddSubCategory(AddSubCategoryInputModel inputModel)
         {
-            await this.subCategoriesRepository.AddAsync(new SubCategory
+            var subcategory = new SubCategory
             {
                 Name = inputModel.Name,
                 CategoryId = inputModel.CategoryId,
-            });
+            };
+
+            await this.subCategoriesRepository.AddAsync(subcategory);
 
             await this.subCategoriesRepository.SaveChangesAsync();
+
+            return subcategory;
         }
 
         public async Task EditSubCategory(EditSubCategoryModel inputModel)
@@ -105,7 +109,7 @@
             return this.subCategoriesRepository.All().Count();
         }
 
-        private SubCategory GetById(int id)
+        public SubCategory GetById(int id)
         {
             return this.subCategoriesRepository.All().FirstOrDefault(x => x.Id == id);
         }

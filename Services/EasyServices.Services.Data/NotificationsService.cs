@@ -8,27 +8,36 @@
     using EasyServices.Data.Common.Repositories;
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
+    using EasyServices.Web.ViewModels.Users;
     using Microsoft.EntityFrameworkCore;
 
     public class NotificationsService : INotificationsService
     {
         private readonly IDeletableEntityRepository<Notification> notificationsRepository;
+        private readonly IUsersService usersService;
 
         public NotificationsService(
             IDeletableEntityRepository<Notification> notificationsRepository,
-            IAnnouncementsService announcementsService)
+            IUsersService usersService)
         {
             this.notificationsRepository = notificationsRepository;
+            this.usersService = usersService;
         }
 
         public async Task AddNotificationFromReviewAsync(Review review)
         {
-            string reviewUser = review.User.Name != null ? review.User.Name : review.User.Email;
+            var reviewUser = this.usersService.GetUserById<UserProfileViewModel>(review.UserId);
+            string reviewUserName = reviewUser.Name != null ? reviewUser.Name : reviewUser.Email;
+
+            if (reviewUser.Id == review.Announcement.UserId)
+            {
+                return;
+            }
 
             var newNotification = new Notification
             {
                 UserId = review.Announcement.UserId,
-                Content = string.Format(ServicesConstants.NewReviewNotificationMessage, reviewUser),
+                Content = string.Format(ServicesConstants.NewReviewNotificationMessage, reviewUserName),
                 Destination = $"/Announcements/Details/{review.Announcement.Id}",
             };
 

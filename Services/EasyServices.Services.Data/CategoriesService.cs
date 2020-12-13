@@ -25,7 +25,6 @@
 
         public IEnumerable<T> GetAll<T>()
         {
-
             IQueryable<Category> query =
                 this.categoriesRepository.All().OrderBy(x => x.Name);
 
@@ -44,7 +43,6 @@
 
         public async Task<ICollection<T>> GetCategoriesAndSubCategoriesAsync<T>()
         {
-
             IQueryable<Category> query =
                 this.categoriesRepository.AllAsNoTracking().OrderBy(x => x.Name);
 
@@ -52,15 +50,19 @@
                 .ToListAsync();
         }
 
-        public async Task AddCategoryAsync(AddCategoryInputModel inputModel)
+        public async Task<Category> AddCategoryAsync(AddCategoryInputModel inputModel)
         {
-            await this.categoriesRepository.AddAsync(new Category
+            var category = new Category
             {
                 Name = inputModel.Name,
                 ImgUrl = inputModel.ImgUrl,
-            });
+            };
+
+            await this.categoriesRepository.AddAsync(category);
 
             await this.categoriesRepository.SaveChangesAsync();
+
+            return category;
         }
 
         public async Task EditCategoryAsync(EditCategoryModel inputModel)

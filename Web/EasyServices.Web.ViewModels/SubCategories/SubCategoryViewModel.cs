@@ -2,12 +2,13 @@
 {
     using System.Collections.Generic;
 
+    using AspNetCoreTemplate.Web.ViewModels;
+    using AutoMapper;
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
     using EasyServices.Web.ViewModels.Announcements;
-    using AutoMapper;
 
-    public class SubCategoryViewModel : IMapFrom<SubCategory>, IHaveCustomMappings
+    public class SubCategoryViewModel : PaggingViewModel, IMapFrom<SubCategory>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -18,10 +19,6 @@
         public string CategoryName { get; set; }
 
         public int CategoryId { get; set; }
-
-        public int PagesCount { get; set; }
-
-        public int CurrentPage { get; set; }
 
         public IEnumerable<AnnouncementViewModel> Announcements { get; set; }
 

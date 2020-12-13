@@ -10,7 +10,7 @@
     {
         IEnumerable<T> GetAll<T>();
 
-        Task AddCategoryAsync(AddCategoryInputModel inputModel);
+        Task<Category> AddCategoryAsync(AddCategoryInputModel inputModel);
 
         Task EditCategoryAsync(EditCategoryModel inputModel);
 

@@ -11,11 +11,15 @@
     {
         private readonly IDeletableEntityRepository<Review> reviewsRepository;
         private readonly INotificationsService notificationsService;
+        private readonly IAnnouncementsService announcementsService;
 
-        public ReviewsService(IDeletableEntityRepository<Review> reviewsRepository, INotificationsService notificationsService)
+        public ReviewsService(IDeletableEntityRepository<Review> reviewsRepository,
+            INotificationsService notificationsService,
+            IAnnouncementsService announcementsService)
         {
             this.reviewsRepository = reviewsRepository;
             this.notificationsService = notificationsService;
+            this.announcementsService = announcementsService;
         }
 
         public async Task<Review> CreateAsync(ReviewInputModel reviewInput)
@@ -30,9 +34,10 @@
                 review = new Review
                 {
                     AnnouncementId = reviewInput.AnnouncementId,
+                    Announcement = await this.announcementsService.GetByIdAsync(reviewInput.AnnouncementId),
                     Comment = reviewInput.Comment,
                     Rating = reviewInput.Rate,
-                    UserId = reviewInput.UserId,
+                    UserId = reviewInput.UserId, // the user that add the review
                 };
 
                 await this.notificationsService.AddNotificationFromReviewAsync(review);

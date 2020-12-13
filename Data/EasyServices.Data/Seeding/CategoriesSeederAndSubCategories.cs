@@ -14,7 +14,6 @@
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            
             if (dbContext.Categories.Any() || dbContext.SubCategories.Any())
             {
                 return;
@@ -46,7 +45,7 @@
 
                 categories.Add(category);
             }
-            ;
+
             await dbContext.Categories.AddRangeAsync(categories);
             await dbContext.SubCategories.AddRangeAsync(subCategories);
 
