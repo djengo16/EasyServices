@@ -9,6 +9,7 @@
     using EasyServices.Data.Common.Repositories;
     using EasyServices.Data.Models;
     using EasyServices.Data.Repositories;
+    using EasyServices.Web.ViewModels.Notifications;
     using EasyServices.Web.ViewModels.Reviews;
     using Microsoft.EntityFrameworkCore;
     using Moq;
@@ -25,7 +26,11 @@
             mockRepo.Setup(x => x.AddAsync(It.IsAny<Review>())).Callback(
                 (Review review) => list.Add(review));
             var notificationsService = new Mock<INotificationsService>();
-            var service = new ReviewsService(mockRepo.Object, notificationsService.Object);
+            var announcementsService = new Mock<IAnnouncementsService>();
+            var service = new ReviewsService(
+                mockRepo.Object,
+                notificationsService.Object,
+                announcementsService.Object);
 
             var reviewInput = new ReviewInputModel
             {
@@ -34,7 +39,7 @@
                 Comment = "test",
                 UserId = "123",
             };
-
+            ;
             await service.CreateAsync(reviewInput);
 
             reviewInput.Rate = 4;
@@ -42,8 +47,11 @@
 
             await service.CreateAsync(reviewInput);
 
+            var notifications = await notificationsService.Object.GetAllByUserIdAsync<NotificationViewModel>("123");
+
             Assert.Single(list);
             Assert.Equal(4, list.First().Rating);
+            Assert.NotNull(notifications);
             Assert.Equal("new comment", list.First().Comment);
         }
 
@@ -55,10 +63,11 @@
             var db = new ApplicationDbContext(options);
             var reviewsRepository = new EfDeletableEntityRepository<Review>(db);
             var notificationsService = new Mock<INotificationsService>();
-
+            var announcementsService = new Mock<IAnnouncementsService>();
             var service = new ReviewsService(
                 reviewsRepository,
-                notificationsService.Object);
+                notificationsService.Object,
+                announcementsService.Object);
 
             var reviewInput = new ReviewInputModel
             {
@@ -74,6 +83,5 @@
 
             Assert.True(review.IsDeleted);
         }
-
     }
 }

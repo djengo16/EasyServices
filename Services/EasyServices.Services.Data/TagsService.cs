@@ -75,6 +75,7 @@
 
         public async Task GetOrUpdateTagsAsync(AnnouncementInputModel announcementInputModel, Announcement announcement)
         {
+            ;
             var actualAnnouncementTags =
                 this.announcementTagsRepository
                 .All().Where(x => x.AnnouncementId == announcement.Id)

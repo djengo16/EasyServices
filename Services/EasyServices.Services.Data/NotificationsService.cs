@@ -26,6 +26,7 @@
 
         public async Task AddNotificationFromReviewAsync(Review review)
         {
+            var test = this.usersService.GetCount();
             var reviewUser = this.usersService.GetUserById<UserProfileViewModel>(review.UserId);
             string reviewUserName = reviewUser.Name != null ? reviewUser.Name : reviewUser.Email;
 
