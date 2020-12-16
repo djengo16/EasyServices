@@ -13,7 +13,7 @@
     using EasyServices.Services.Mapping;
     using EasyServices.Services.Messaging;
     using EasyServices.Web.ViewModels;
-
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -56,6 +56,19 @@
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton(this.configuration);
+
+            services.AddAuthentication()
+                .AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = this.configuration["FacebookAuthentication:AppId"];
+                facebookOptions.AppSecret = this.configuration["FacebookAuthentication:AppSecret"];
+            })
+            .AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = this.configuration["GoogleAuthentication:ClientId"];
+                googleOptions.ClientSecret = this.configuration["GoogleAuthentication:ClientSecret"];
+                googleOptions.ClaimActions.MapJsonKey("picture", "picture");
+            });
 
             // Cloudinary account reg
             Account account = new Account(

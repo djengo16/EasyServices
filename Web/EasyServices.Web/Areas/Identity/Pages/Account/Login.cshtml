@@ -5,8 +5,9 @@
     ViewData["Title"] = "Влез";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center align-items-center">
     <div class="col-md-4">
         <section>
             <form id="account" method="post">
@@ -43,11 +44,7 @@
                 </div>
             </form>
         </section>
-    </div>
-    @*<div class="col-md-6 col-md-offset-2">
-        <section>
-            <h4>Use another service to log in.</h4>
-            <hr />
+        <div class="row justify-content-center align-items-center">
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
@@ -65,17 +62,41 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    if (provider.Name == "Facebook")
+                                    {
+
+                                        <button type="submit"
+                                                style="color: blue;"
+                                                class="btn-lg btn-fb"
+                                                name="provider"
+                                                value="@provider.Name"
+                                                title="Log in using your @provider.DisplayName account">
+                                            <i class="fab fa-facebook-f pr-1"></i>@provider.DisplayName
+                                        </button>
+                                    }
+                                    if (provider.Name == "Google")
+                                    {
+
+                                        <button type="submit"
+                                                style="color: red;"
+                                                class="btn-lg btn-fb"
+                                                name="provider"
+                                                value="@provider.Name"
+                                                title="Log in using your @provider.DisplayName account">
+                                            <i class="fab fa-google"></i>@(provider.DisplayName.Substring(1,5))
+                                        </button>
+                                    }
                                 }
                             </p>
                         </div>
                     </form>
                 }
             }
-        </section>
+        </div>
     </div>
-</div>*@
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 }
