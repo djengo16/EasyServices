@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
     using EasyServices.Data;
@@ -12,8 +10,6 @@
     using EasyServices.Data.Repositories;
     using EasyServices.Services.Mapping;
     using EasyServices.Web.ViewModels.Announcements;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Http.Internal;
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using Xunit;
@@ -142,26 +138,25 @@
             Assert.Equal("title", announcementById.Title);
         }
 
-        //[Fact]
-        // public async Task GetDetailsShouldWorkCorrectly()
-        //{
-        //    var service = this.GetService();
+        [Fact]
+        public async Task GetDetailsShouldWorkCorrectly()
+        {
+            var service = this.GetService();
 
-        //    var announcement = new AnnouncementInputModel
-        //    {
-        //        SubCategoryId = 1,
-        //        Title = "title",
-        //        Description = "description",
-        //        UserId = "123",
-        //    };
-        //    var id = await service.CreateAsync(announcement);
+            var announcement = new AnnouncementInputModel
+            {
+                SubCategoryId = 1,
+                Title = "title",
+                Description = "description",
+                UserId = "123",
+            };
+            var id = await service.CreateAsync(announcement);
 
-        //    var announcementDetails = service.GetDetails<AnnouncementDetailsViewModel>(id);
+            var announcementDetails = service.GetDetails<TestAnnouncementModel>(id);
 
-        //    Assert.Equal(2, announcementDetails.Tags.Count);
-        //    Assert.Equal("title", announcementDetails.Title);
-        //    Assert.Equal("description", announcementDetails.Description);
-        //}
+            Assert.Equal("title", announcementDetails.Title);
+            Assert.Equal("description", announcementDetails.Description);
+        }
 
         [Fact]
         public async Task UpdateShouldUpdateCorrectly()
@@ -281,14 +276,130 @@
                 await service.CreateAsync(announcement);
             }
 
-            // cityId , subcategoryId , keywords
-            ;
             var result = service
                 .GetBySearchParams<TestAnnouncementModel>(2, 1, "title");
 
             Assert.Equal(4, result.Count());
-            Assert.True(result.Any(x => x.Title.Contains("title")));
+            Assert.True(result.All(x => x.Title.Contains("title")));
         }
 
+        [Fact]
+        public async Task SearchShouldWorkCorrectlyWithGivenSubCategory()
+        {
+            var service = this.GetService();
+
+            for (int i = 0; i < 4; i++)
+            {
+                var announcement = new AnnouncementInputModel
+                {
+                    SubCategoryId = 1,
+                    Title = "title" + i.ToString(),
+                    Description = "description",
+                    UserId = "123",
+                    CityId = 2,
+                };
+                await service.CreateAsync(announcement);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                var announcement = new AnnouncementInputModel
+                {
+                    SubCategoryId = 5,
+                    Title = "another" + i.ToString(),
+                    Description = "another",
+                    UserId = "123",
+                    CityId = 4,
+                };
+                await service.CreateAsync(announcement);
+            }
+
+            var result = service
+                .GetBySearchParams<TestAnnouncementModel>(null, 1, null);
+
+            Assert.Equal(4, result.Count());
+        }
+
+        [Fact]
+        public async Task SearchShouldWorkCorrectlyWithGivenCity()
+        {
+            var service = this.GetService();
+
+            for (int i = 0; i < 4; i++)
+            {
+                var announcement = new AnnouncementInputModel
+                {
+                    SubCategoryId = 1,
+                    Title = "title" + i.ToString(),
+                    Description = "description",
+                    UserId = "123",
+                    CityId = 2,
+                };
+                await service.CreateAsync(announcement);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                var announcement = new AnnouncementInputModel
+                {
+                    SubCategoryId = 5,
+                    Title = "another" + i.ToString(),
+                    Description = "another",
+                    UserId = "123",
+                    CityId = 4,
+                };
+                await service.CreateAsync(announcement);
+            }
+
+            var result = service
+                .GetBySearchParams<TestAnnouncementModel>(2, null, null);
+
+            Assert.Equal(4, result.Count());
+        }
+
+        [Fact]
+        public async Task GetCountFromSearchedShouldReturnCorrectCount()
+        {
+            var service = this.GetService();
+
+            for (int i = 0; i < 4; i++)
+            {
+                var announcement = new AnnouncementInputModel
+                {
+                    SubCategoryId = 1,
+                    Title = "title" + i.ToString(),
+                    Description = "description",
+                    UserId = "123",
+                    CityId = 2,
+                };
+                await service.CreateAsync(announcement);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                var announcement = new AnnouncementInputModel
+                {
+                    SubCategoryId = 5,
+                    Title = "another" + i.ToString(),
+                    Description = "another",
+                    UserId = "123",
+                    CityId = 4,
+                };
+                await service.CreateAsync(announcement);
+            }
+
+            var resultWithThreeParams = service
+                .GetCountFromSearched(2, 1, "title");
+
+            var resultWithCityParams = service
+                .GetCountFromSearched(4, null, null);
+
+            var resultWithSubCategory = service
+                .GetCountFromSearched(null, 5, null);
+
+            Assert.Equal(4, resultWithThreeParams);
+            Assert.Equal(3, resultWithCityParams);
+            Assert.Equal(3, resultWithSubCategory);
+        }
     }
 }

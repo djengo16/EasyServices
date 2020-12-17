@@ -64,13 +64,12 @@
         [HttpPost]
         public async Task<IActionResult> Contacts(SendMailInputModel inpumodel)
         {
-
             var html = "<p>" + inpumodel.Content + "</p>";
 
             await this.emailSender.SendEmailAsync(
+                GlobalConstants.SingleSender,
                 inpumodel.SenderMailAddress,
-                inpumodel.SenderMailAddress,
-                "easyservices16@protonmail.com",
+                GlobalConstants.SystemMail,
                 inpumodel.Title,
                 html);
 

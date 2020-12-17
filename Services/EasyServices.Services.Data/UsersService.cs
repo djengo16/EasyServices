@@ -25,7 +25,8 @@
 
             var returnModel = this.usersRepository
                 .AllAsNoTracking()
-                .Where(x => x.Email.Contains(searchKeywords) || x.Name.Contains(searchKeywords));
+                .Where(x => x.Email.ToLower().Contains(searchKeywords.ToLower())
+                || x.Name.ToLower().Contains(searchKeywords.ToLower()));
 
             return returnModel.To<T>().ToList();
 

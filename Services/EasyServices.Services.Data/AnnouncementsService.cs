@@ -40,7 +40,7 @@
                 SubCategoryId = announcementInputModel.SubCategoryId,
                 Title = announcementInputModel.Title,
                 Description = announcementInputModel.Description,
-                City = this.citiesService.GetCityById(announcementInputModel.CityId),
+                CityId = announcementInputModel.CityId,
                 Price = announcementInputModel.Price,
                 UserId = announcementInputModel.UserId,
                 CategoryId = this.subCategoriesService.GetCategoryId(announcementInputModel.SubCategoryId),
@@ -173,6 +173,8 @@
 
         public IEnumerable<T> GetBySearchParams<T>(int? cityId, int? subCategoryId, string keywords, int? take = null, int skip = 0)
         {
+            var test = this.announcementsRepository.All().ToList();
+
             var queryModel =
                 this.announcementsRepository.All()
                 .Where(x => cityId != null ? x.CityId == cityId : true);
