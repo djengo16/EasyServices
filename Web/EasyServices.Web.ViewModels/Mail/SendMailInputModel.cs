@@ -14,7 +14,7 @@
         public string SenderMailAddress { get; set; }
 
         [Required(ErrorMessage = ErrorMessages.RequiredField)]
-        [MaxLength(500, ErrorMessage = ErrorMessages.TooBigMailContent)]
+        [MaxLength(1000, ErrorMessage = ErrorMessages.TooBigMailContent)]
         public string Content { get; set; }
     }
 }

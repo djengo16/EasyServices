@@ -16,13 +16,13 @@
 
         public string Title { get; set; }
 
-        public string SubCategoryName { get; set; } = "Default";
+        public string SubCategoryName { get; set; }
 
         public int SubCategoryId { get; set; }
 
         public int ReviewsCount { get; set; }
 
-        public string CityName { get; set; } = "Default";
+        public string CityName { get; set; }
 
         public string Description { get; set; }
 

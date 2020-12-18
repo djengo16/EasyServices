@@ -27,7 +27,6 @@
             this.cloudinary = cloudinary;
         }
 
-
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -59,7 +58,7 @@
         {
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-            Input = new InputModel
+            this.Input = new InputModel
             {
                 Name = user.Name,
                 PhoneNumber = phoneNumber,
@@ -77,8 +76,8 @@
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            await LoadAsync(user);
-            return Page();
+            await this.LoadAsync(user);
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(IFormFile file)
@@ -88,23 +87,23 @@
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                await LoadAsync(user);
-                return Page();
+                await this.LoadAsync(user);
+                return this.Page();
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            if (this.Input.PhoneNumber != phoneNumber)
             {
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    this.StatusMessage = "Unexpected error when trying to set phone number.";
+                    return this.RedirectToPage();
                 }
             }
 
@@ -125,16 +124,16 @@
 
             if (file != null)
             {
-             //  await CloudinaryHelper.RemoveFileAsync(this.cloudinary, user.ProfilePicture); // Deleting the old img
+                await CloudinaryHelper.RemoveFileAsync(this.cloudinary, user.ProfilePicture); // Deleting the old img
 
-                var imageUrl = await CloudinaryHelper.UploadFileAsync(this.cloudinary, file, true);
+                string imageUrl = await CloudinaryHelper.UploadFileAsync(this.cloudinary, file, true);
                 user.ProfilePicture = imageUrl;
             }
 
             await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Профила е обновен";
-            return RedirectToPage();
+            this.StatusMessage = "Профила е обновен";
+            return this.RedirectToPage();
         }
     }
 }

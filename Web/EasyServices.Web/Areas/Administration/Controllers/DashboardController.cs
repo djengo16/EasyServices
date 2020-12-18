@@ -9,12 +9,10 @@
 
     public class DashboardController : AdministrationController
     {
-        private readonly ISettingsService settingsService;
         private readonly ICategoriesService categoriesService;
 
-        public DashboardController(ISettingsService settingsService, ICategoriesService categoriesService)
+        public DashboardController(ICategoriesService categoriesService)
         {
-            this.settingsService = settingsService;
             this.categoriesService = categoriesService;
         }
 

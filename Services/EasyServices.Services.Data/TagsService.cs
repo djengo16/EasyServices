@@ -11,7 +11,6 @@
 
     public class TagsService : ITagsService
     {
-
         private const int TagLength = 50;
         private readonly IRepository<Tag> tagsRepository;
         private readonly IRepository<AnnouncementTag> announcementTagsRepository;
@@ -49,8 +48,7 @@
 
         public IEnumerable<T> GetAll<T>()
         {
-            var query =
-                this.tagsRepository.All();
+            var query = this.tagsRepository.All();
 
             return query.To<T>().ToList();
         }

@@ -18,7 +18,7 @@
                 <p>Имейл: <a>@Model.Email<a /></p>
                 <p>Брой обяви: <a>@Model.Announcements.Count</a></p>
                 <p>Телефон: <a>@Model.PhoneNumber</a></p>
-                <p style="word-wrap: break-word; font-family:'Times New Roman'">За мен: <br /> @Model.DescriptionInfo</p>
+                <p style="word-wrap: break-word; font-family:'Times New Roman'">За мен: <br /> @Model.Description</p>
             </div>
         </div>
 
@@ -37,20 +37,3 @@
     </div>
 </div>
 
-
-@*@section Scripts{
-    <script>
-    $(document).ready(function () {
-            $(".moreBox").slice(0, 3).show();
-            if ($(".blogBox:hidden").length != 0) {
-                $("#loadMore").show();
-            }
-            $("#loadMore").on('click', function (e) {
-                e.preventDefault();
-                $(".moreBox:hidden").slice(0, 6).slideDown();
-                if ($(".moreBox:hidden").length == 0) {
-                    $("#loadMore").fadeOut('slow');
-                }
-            });
-        });</script>
-}*@

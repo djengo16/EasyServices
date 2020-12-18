@@ -7,6 +7,7 @@
 
     using EasyServices.Data.Common.Repositories;
     using EasyServices.Data.Models;
+    using EasyServices.Services.Data.Common;
     using EasyServices.Services.Mapping;
     using Microsoft.EntityFrameworkCore;
 
@@ -80,39 +81,53 @@
             var timeSpan = new TimeSpan(DateTime.UtcNow.Ticks - createdOn.Ticks);
             double delta = Math.Abs(timeSpan.TotalSeconds);
 
+            if (delta < 60)
+            {
+                return NotificationTime.RightNow;
+            }
+
+            if (delta < 60 * 2)
+            {
+                return NotificationTime.MinuteAgo;
+            }
+
             if (delta < 45 * 60)
             {
-                return "Преди " + timeSpan.Minutes + " минути.";
+                return string.Format(NotificationTime.MinutesAgo, timeSpan.Minutes);
             }
 
             if (delta < 90 * 60)
             {
-                return "Преди час.";
+                return NotificationTime.HourAgo;
             }
 
             if (delta < 24 * 60 * 60)
             {
-                return "Преди " + timeSpan.Hours + " часа.";
+                return string.Format(NotificationTime.HoursAgo, timeSpan.Hours);
             }
 
             if (delta < 48 * 60 * 60)
             {
-                return "От вчера.";
+                return NotificationTime.Yesterday;
             }
 
             if (delta < 30 * 24 * 60 * 60)
             {
-                return "Преди " + timeSpan.Days + " дена.";
+                return string.Format(NotificationTime.DaysAgo, timeSpan.Days);
             }
 
             if (delta < 12 * 30 * 24 * 60 * 60)
             {
                 int months = Convert.ToInt32(Math.Floor((double)timeSpan.Days / 30));
-                return months <= 1 ? "Преди месец." : "Преди " + months + " месеца.";
+                return months <= 1
+                    ? NotificationTime.MonthAgo
+                    : string.Format(NotificationTime.MonthsAgo, months);
             }
 
             int years = Convert.ToInt32(Math.Floor((double)timeSpan.Days / 365));
-            return years <= 1 ? "Преди година" : "Преди " + years + " години.";
+            return years <= 1
+                ? NotificationTime.YearAgo
+                : string.Format(NotificationTime.YearsAgo, years);
         }
     }
 }

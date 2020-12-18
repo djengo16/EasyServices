@@ -1,4 +1,4 @@
-﻿namespace EasyServices.Services.Data
+﻿namespace EasyServices.Services.Data.Common
 {
     public static class ServicesConstants
     {

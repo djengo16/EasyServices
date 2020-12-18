@@ -20,7 +20,7 @@
 
         public string ProfilePicture { get; set; }
 
-        public string DescriptionInfo { get; set; }
+        public string Description { get; set; }
 
         public ICollection<AnnouncementViewModel> Announcements { get; set; }
     }

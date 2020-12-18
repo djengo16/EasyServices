@@ -63,15 +63,15 @@
     <div class="form-group">
         <label asp-for="Description"></label>
         <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" 
+        <span asp-validation-for="Description"
               class="text-danger"></span>
     </div>
 
     <div class="form-group"></div>
     <label asp-for="@Model.Tags"></label>
-    <select asp-for="@Model.Tags" 
-            title="Тагове към обявата" 
-            class="form-control mul-select" 
+    <select asp-for="@Model.Tags"
+            title="Тагове към обявата"
+            class="form-control mul-select"
             multiple="true">
         @foreach (var tag in Model.TagsItems)
         {
@@ -88,8 +88,8 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">лв</span>
                 </div>
-                <input asp-for="Price" type="number" 
-                       class="form-control" 
+                <input asp-for="Price" type="number"
+                       class="form-control"
                        aria-label="Amount (to the nearest dollar)">
                 <div class="input-group-append cc_cursor">
                     <span class="input-group-text">.00</span>
@@ -125,7 +125,7 @@
                 tags: true,
                 tokenSeparators: ['/', ',', ';', " "]
             });
-        })        
+        })
     </script>
-   
+
 }

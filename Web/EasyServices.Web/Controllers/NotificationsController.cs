@@ -5,8 +5,10 @@
 
     using EasyServices.Services.Data;
     using EasyServices.Web.ViewModels.Notifications;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    [Authorize]
     public class NotificationsController : BaseController
     {
         private readonly INotificationsService notificationsService;

@@ -90,9 +90,13 @@
         [Authorize]
         public async Task<IActionResult> Edit(string id)
         {
-
             var currentLoggedUser = this.userManager.GetUserId(this.HttpContext.User);
             var announcement = await this.announcementsService.GetByIdAsync(id);
+
+            if (currentLoggedUser != announcement.UserId && !this.User.IsInRole("Administrator"))
+            {
+                return this.Redirect(this.HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Referer").Value);
+            }
 
             var viewModel = new UpdateAnnouncementInputModel
             {
@@ -109,11 +113,6 @@
                 ImagesUrl = announcement.Images.Select(x => x.Url).ToList(),
                 Tags = this.tagsService.GetNamesByAnnouncementId(announcement.Id),
             };
-
-            if (currentLoggedUser != announcement.UserId && !this.User.IsInRole("Administrator"))
-            {
-                return this.Redirect(this.HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Referer").Value);
-            }
 
             return this.View(viewModel);
         }
@@ -168,7 +167,9 @@
                 : this.subCategoriesService.GetNameById(subCategoryId.GetValueOrDefault()),
                 SubCategoryId = subCategoryId,
                 CityId = cityId,
-                CityName = cityId == null ? null : this.citiesService.GetCityById(cityId).Name,
+                CityName = cityId == null
+                ? null
+                : this.citiesService.GetCityById(cityId).Name,
                 Keywords = keywords,
                 Announcements = this.announcementsService
                 .GetBySearchParams<AnnouncementViewModel>(

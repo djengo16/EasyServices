@@ -46,7 +46,6 @@
                         Email = $"test{i}@test.com",
                         PasswordHash = "1234",
                         ProfilePicture = "testurl",
-
                     });
                 }
             }

@@ -15,7 +15,6 @@
 
         public IActionResult Profile(string id)
         {
-            ;
             var viewModel = this.usersService.GetUserById<UserProfileViewModel>(id);
 
             return this.View(viewModel);
