@@ -13,7 +13,8 @@
         private readonly INotificationsService notificationsService;
         private readonly IAnnouncementsService announcementsService;
 
-        public ReviewsService(IDeletableEntityRepository<Review> reviewsRepository,
+        public ReviewsService(
+            IDeletableEntityRepository<Review> reviewsRepository,
             INotificationsService notificationsService,
             IAnnouncementsService announcementsService)
         {
@@ -37,7 +38,8 @@
                     Announcement = await this.announcementsService.GetByIdAsync(reviewInput.AnnouncementId),
                     Comment = reviewInput.Comment,
                     Rating = reviewInput.Rate,
-                    UserId = reviewInput.UserId, // the user that add the review
+                    UserId = reviewInput.UserId,
+                    User = reviewInput.User, // the user that add the review
                 };
 
                 await this.notificationsService.AddNotificationFromReviewAsync(review);

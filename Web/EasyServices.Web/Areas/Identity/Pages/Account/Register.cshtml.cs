@@ -46,20 +46,20 @@
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress(ErrorMessage = "Имейлът не е валиден!")]
+            [Required(ErrorMessage = ErrorMessages.RequiredField)]
+            [EmailAddress(ErrorMessage = ErrorMessages.InvalidMail)]
             [Display(Name = "Имейл")]
             public string Email { get; set; }
 
-            [Required]
-            [StringLength(50, ErrorMessage = "Паролата трябва да бъде най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
+            [Required(ErrorMessage = ErrorMessages.RequiredField)]
+            [StringLength(50, ErrorMessage = ErrorMessages.PasswordLenghtRequirement, MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Парола")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Потвърдете паролата")]
-            [Compare("Password", ErrorMessage = "Паролите не съвпадат.")]
+            [Compare("Password", ErrorMessage = ErrorMessages.PasswordsDoNotMatch)]
             public string ConfirmPassword { get; set; }
         }
 

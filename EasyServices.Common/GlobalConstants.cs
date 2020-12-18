@@ -20,6 +20,9 @@
 
         public const string DefaultProfilePicture = "https://icon-library.com/images/default-profile-icon/default-profile-icon-16.jpg";
 
-        public const string SiteMail = "djengizibrqmov@gmail.com";
+        public const string SystemMail = "easyservicesplatform@gmail.com";
+
+        public const string SingleSender = "djengizibrqmov@gmail.com";
+
     }
 }

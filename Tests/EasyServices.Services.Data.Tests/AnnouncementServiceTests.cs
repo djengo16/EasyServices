@@ -29,14 +29,12 @@
             var announcementsRepository = new EfDeletableEntityRepository<Announcement>(db);
             var subCategoriesService = new Mock<ISubCategoriesService>();
             var tagsService = new Mock<ITagsService>();
-            var citiesService = new Mock<ICitiesService>();
             var imagesService = new Mock<IImagesService>();
 
             var announcementsService = new AnnouncementsService(
                 announcementsRepository,
                 subCategoriesService.Object,
                 tagsService.Object,
-                citiesService.Object,
                 imagesService.Object);
 
             return announcementsService;

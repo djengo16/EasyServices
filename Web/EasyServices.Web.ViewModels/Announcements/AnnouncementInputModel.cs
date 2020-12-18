@@ -21,7 +21,6 @@
         public string Title { get; set; }
 
         [Display(Name = "Описание")]
-        [MaxLength(1000)]
         public string Description { get; set; }
 
         [Display(Name = "Цена")]
@@ -46,7 +45,7 @@
 
         public IEnumerable<KeyValuePair<string, string>> CitiesItems { get; set; }
 
-        public IEnumerable<AnnouncementTagsInputModel> TagsItems { get; set; }
+        public IEnumerable<AnnouncementTagInputModel> TagsItems { get; set; }
 
     }
 }

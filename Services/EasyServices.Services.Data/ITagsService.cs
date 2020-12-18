@@ -14,7 +14,7 @@
 
         bool CheckIfExist(string tagName);
 
-        Task<int> Create(string tagName);
+        Task<int> CreateAsync(string tagName);
 
         int FindTagId(string tagName);
 

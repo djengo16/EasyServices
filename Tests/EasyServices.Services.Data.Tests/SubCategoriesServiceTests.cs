@@ -9,7 +9,6 @@
     using EasyServices.Data.Repositories;
     using EasyServices.Services.Mapping;
     using EasyServices.Web.ViewModels.Administration.SubCategories;
-    using EasyServices.Web.ViewModels.SubCategories;
     using Microsoft.EntityFrameworkCore;
     using Xunit;
 

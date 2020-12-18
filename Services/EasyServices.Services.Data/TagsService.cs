@@ -16,7 +16,9 @@
         private readonly IRepository<Tag> tagsRepository;
         private readonly IRepository<AnnouncementTag> announcementTagsRepository;
 
-        public TagsService(IRepository<Tag> tagsRepository, IRepository<AnnouncementTag> announcementTagsRepository)
+        public TagsService(
+            IRepository<Tag> tagsRepository,
+            IRepository<AnnouncementTag> announcementTagsRepository)
         {
             this.tagsRepository = tagsRepository;
             this.announcementTagsRepository = announcementTagsRepository;
@@ -27,7 +29,7 @@
             return this.tagsRepository.All().Any(x => x.Name == tagName);
         }
 
-        public async Task<int> Create(string tagName)
+        public async Task<int> CreateAsync(string tagName)
         {
             var newTag = new Tag
             {
@@ -73,16 +75,17 @@
             return result;
         }
 
-        public async Task GetOrUpdateTagsAsync(AnnouncementInputModel announcementInputModel, Announcement announcement)
+        public async Task GetOrUpdateTagsAsync(
+            AnnouncementInputModel announcementInputModel,
+            Announcement announcement)
         {
-            ;
             var actualAnnouncementTags =
                 this.announcementTagsRepository
                 .All().Where(x => x.AnnouncementId == announcement.Id)
                 .Select(x => new
                 {
                    TagName = x.Tag.Name,
-                   TagId = x.TagId,
+                   x.TagId,
                 })
                 .ToList();
 
@@ -96,7 +99,7 @@
 
                 if (!this.CheckIfExist(tag))
                 {
-                    tagId = await this.Create(tag);
+                    tagId = await this.CreateAsync(tag);
                 }
                 else
                 {
@@ -126,6 +129,7 @@
                         this.announcementTagsRepository.Delete(tagToRemove);
                     }
                 }
+
                 await this.announcementTagsRepository.SaveChangesAsync();
             }
         }

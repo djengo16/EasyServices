@@ -17,5 +17,11 @@
         public const string InvalidMail = "Имейл адресът е невалиден!";
 
         public const string RequiredField = "Полето е задължително!";
+
+        public const string PasswordLenghtRequirement = "Паролата трябва да бъде най-малко {2} и най-много {1} символа.";
+
+        public const string PasswordsDoNotMatch = "Паролите не съвпадат!";
+
+        public const string InvalidEmailOrPassword = "Неправилен имейл или парола.";
     }
 }

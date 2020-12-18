@@ -8,29 +8,23 @@
     using EasyServices.Data.Common.Repositories;
     using EasyServices.Data.Models;
     using EasyServices.Services.Mapping;
-    using EasyServices.Web.ViewModels.Users;
     using Microsoft.EntityFrameworkCore;
 
     public class NotificationsService : INotificationsService
     {
         private readonly IDeletableEntityRepository<Notification> notificationsRepository;
-        private readonly IUsersService usersService;
 
         public NotificationsService(
-            IDeletableEntityRepository<Notification> notificationsRepository,
-            IUsersService usersService)
+            IDeletableEntityRepository<Notification> notificationsRepository)
         {
             this.notificationsRepository = notificationsRepository;
-            this.usersService = usersService;
         }
 
         public async Task AddNotificationFromReviewAsync(Review review)
         {
-            var test = this.usersService.GetCount();
-            var reviewUser = this.usersService.GetUserById<UserProfileViewModel>(review.UserId);
-            string reviewUserName = reviewUser.Name != null ? reviewUser.Name : reviewUser.Email;
+            string reviewUserName = review.User.Name != null ? review.User.Name : review.User.Email;
 
-            if (reviewUser.Id == review.Announcement.UserId)
+            if (review.User.Id == review.Announcement.UserId)
             {
                 return;
             }
@@ -64,8 +58,8 @@
 
         public async Task SeeNotificationAsync(int norificationId)
         {
-            var notification = await this.notificationsRepository.All()
-                .FirstAsync(x => x.Id == norificationId);
+            var notification = this.notificationsRepository.All()
+                .FirstOrDefault(x => x.Id == norificationId);
 
             notification.IsSeen = true;
 

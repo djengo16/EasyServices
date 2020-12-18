@@ -16,20 +16,17 @@
         private readonly IDeletableEntityRepository<Announcement> announcementsRepository;
         private readonly ISubCategoriesService subCategoriesService;
         private readonly ITagsService tagsService;
-        private readonly ICitiesService citiesService;
         private readonly IImagesService imagesService;
 
         public AnnouncementsService(
             IDeletableEntityRepository<Announcement> announcementsRepository,
             ISubCategoriesService subCategoriesService,
             ITagsService tagsService,
-            ICitiesService citiesService,
             IImagesService imagesService)
         {
             this.announcementsRepository = announcementsRepository;
             this.subCategoriesService = subCategoriesService;
             this.tagsService = tagsService;
-            this.citiesService = citiesService;
             this.imagesService = imagesService;
         }
 

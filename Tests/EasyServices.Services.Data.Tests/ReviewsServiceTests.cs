@@ -39,7 +39,7 @@
                 Comment = "test",
                 UserId = "123",
             };
-            ;
+
             await service.CreateAsync(reviewInput);
 
             reviewInput.Rate = 4;

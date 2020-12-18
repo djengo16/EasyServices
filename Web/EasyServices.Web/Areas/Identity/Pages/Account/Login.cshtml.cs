@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using EasyServices.Common;
 
 namespace EasyServices.Web.Areas.Identity.Pages.Account
 {
@@ -43,12 +44,12 @@ namespace EasyServices.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = ErrorMessages.RequiredField)]
+            [EmailAddress(ErrorMessage = ErrorMessages.InvalidMail)]
             [Display(Name = "Имейл")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = ErrorMessages.RequiredField)]
             [DataType(DataType.Password)]
             [Display(Name = "Парола")]
             public string Password { get; set; }
@@ -98,7 +99,7 @@ namespace EasyServices.Web.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Неправилен имейл или парола.");
+                    ModelState.AddModelError(string.Empty, ErrorMessages.InvalidEmailOrPassword);
                     return Page();
                 }
             }

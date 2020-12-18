@@ -43,8 +43,9 @@
         {
             var viewModel = new AnnouncementInputModel();
             viewModel.CitiesItems = this.citiesService.GetAllAsKeyValuePairs();
-            viewModel.Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>();
-            viewModel.TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>();
+            viewModel.Categories = await this.categoriesService
+                .GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>();
+            viewModel.TagsItems = this.tagsService.GetAll<AnnouncementTagInputModel>();
             return this.View(viewModel);
         }
 
@@ -54,9 +55,10 @@
         {
             if (!this.ModelState.IsValid)
             {
-                inputModel.TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>();
+                inputModel.TagsItems = this.tagsService.GetAll<AnnouncementTagInputModel>();
                 inputModel.CitiesItems = this.citiesService.GetAllAsKeyValuePairs();
-                inputModel.Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>();
+                inputModel.Categories = await this.categoriesService
+                    .GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>();
 
                 return this.View(inputModel);
             }
@@ -101,8 +103,9 @@
                 SubCategoryId = announcement.SubCategoryId,
                 CityId = announcement.CityId,
                 CitiesItems = this.citiesService.GetAllAsKeyValuePairs(),
-                Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>(),
-                TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>(),
+                Categories = await this.categoriesService
+                .GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>(),
+                TagsItems = this.tagsService.GetAll<AnnouncementTagInputModel>(),
                 ImagesUrl = announcement.Images.Select(x => x.Url).ToList(),
                 Tags = this.tagsService.GetNamesByAnnouncementId(announcement.Id),
             };
@@ -141,9 +144,10 @@
                     ImagesUrl = announcement.Images.Select(x => x.Url).ToList(),
                 };
 
-                currentInput.TagsItems = this.tagsService.GetAll<AnnouncementTagsInputModel>();
+                currentInput.TagsItems = this.tagsService.GetAll<AnnouncementTagInputModel>();
                 currentInput.CitiesItems = this.citiesService.GetAllAsKeyValuePairs();
-                currentInput.Categories = await this.categoriesService.GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>();
+                currentInput.Categories = await this.categoriesService
+                    .GetCategoriesAndSubCategoriesAsync<AnnouncementCategoryInputModel>();
 
                 return this.View(currentInput);
             }
@@ -159,7 +163,9 @@
         {
             var viewModel = new AnnouncementsFromSearchModel
             {
-                SubCategoryName = subCategoryId == null ? null : this.subCategoriesService.GetNameById(subCategoryId.GetValueOrDefault()),
+                SubCategoryName = subCategoryId == null
+                ? null
+                : this.subCategoriesService.GetNameById(subCategoryId.GetValueOrDefault()),
                 SubCategoryId = subCategoryId,
                 CityId = cityId,
                 CityName = cityId == null ? null : this.citiesService.GetCityById(cityId).Name,

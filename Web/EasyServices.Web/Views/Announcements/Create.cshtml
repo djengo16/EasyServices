@@ -1,6 +1,5 @@
 ﻿@using EasyServices.Web.ViewModels.Announcements
 
-@inject EasyServices.Data.ApplicationDbContext dbcontext
 @inject EasyServices.Services.Data.ICategoriesService categoriesService
 @model AnnouncementInputModel
 
@@ -64,12 +63,16 @@
     <div class="form-group">
         <label asp-for="Description"></label>
         <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
+        <span asp-validation-for="Description" 
+              class="text-danger"></span>
     </div>
 
     <div class="form-group"></div>
     <label asp-for="@Model.Tags"></label>
-    <select asp-for="@Model.Tags" title="Тагове към обявата" class="form-control mul-select" multiple="true">
+    <select asp-for="@Model.Tags" 
+            title="Тагове към обявата" 
+            class="form-control mul-select" 
+            multiple="true">
         @foreach (var tag in Model.TagsItems)
         {
             <option value="@tag.Name">@tag.Name</option>
@@ -78,9 +81,6 @@
     <br />
     <br />
 
-
-
-
     <div class="form-group">
         <label asp-for="Price"></label>
         <div class="form-group">
@@ -88,7 +88,9 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">лв</span>
                 </div>
-                <input asp-for="Price" type="number" class="form-control" aria-label="Amount (to the nearest dollar)">
+                <input asp-for="Price" type="number" 
+                       class="form-control" 
+                       aria-label="Amount (to the nearest dollar)">
                 <div class="input-group-append cc_cursor">
                     <span class="input-group-text">.00</span>
                 </div>
@@ -106,13 +108,7 @@
         </div>
     </div>
     <br />
-    @*<div class="form-group">
-            <label asp-for="Images"></label>
-            <input asp-for="Images" class="form-control" multiple />
-        </div>*@
-
     <input type="submit" value="Създай" class="btn btn-primary" />
-
 </form>
 
 
