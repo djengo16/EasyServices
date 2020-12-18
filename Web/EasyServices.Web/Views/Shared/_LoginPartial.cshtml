@@ -40,10 +40,11 @@
             if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 <li class="nav-item">
-                    <a class="nav-link text-dark"
+                    <a class="nav-link bold"
+                       style="color:darkred"
                        asp-area="Administration"
                        asp-controller="Dashboard"
-                       asp-action="Index" title="Admin">Admin</a>
+                       asp-action="Index" title="Admin">Админ</a>
                 </li>
             }
             <li class="nav-item">
