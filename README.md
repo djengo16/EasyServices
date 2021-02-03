@@ -24,3 +24,5 @@ Admins can add/delete/edit categories,subcategories and also user's announcement
 - CSS
 - Facebook & Google for developers
 -  Template by [Nikolay Kostov](https://github.com/NikolayIT/ASP.NET-Core-Template)
+
+url: https://easyservicesplatform.azurewebsites.net/
